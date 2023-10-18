@@ -1,11 +1,11 @@
 package com.ims.service;
 
-import com.ims.entity.User;
+import com.ims.entity.Users;
 
 public interface UserService {
 
     /**
      * Create User
      */
-    void createUser(User user);
+    void createUser(Users user);
 }

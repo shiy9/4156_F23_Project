@@ -1,7 +1,6 @@
 package com.ims.controller;
 
-import com.ims.entity.User;
-import com.ims.mapper.UserMapper;
+import com.ims.entity.Users;
 import com.ims.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +16,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public String register (@RequestBody User user) {
+    public String register (@RequestBody Users user) {
         // TODO email and password are not null
         // TODO check if email exists
         // TODO password restrictions
