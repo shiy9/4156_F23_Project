@@ -16,7 +16,6 @@ public class UserServiceImpl implements UserService {
 
     private static final String EMAIL_REGEX = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 
-    // Min 8 characters, at least oneletter and one number
     private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
 
     @Override
@@ -48,5 +47,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users getUser(String email) {
         return userMapper.getUser(email);
+    }
+
+    @Override
+    public void testDeleteByEmail(String email) {
+        userMapper.testDeleteByEmail(email);
     }
 }

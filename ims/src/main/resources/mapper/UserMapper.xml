@@ -18,5 +18,11 @@
         FROM Users
         WHERE email = #{email}
     </select>
+    
+    <delete id="testDeleteByEmail">
+        DELETE
+        FROM Users
+        WHERE email = #{email}
+    </delete>
 
 </mapper>
