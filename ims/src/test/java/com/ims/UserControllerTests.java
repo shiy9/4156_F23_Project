@@ -1,4 +1,4 @@
-package com.ims.controller;
+package com.ims;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ims.constants.UserMessages;
