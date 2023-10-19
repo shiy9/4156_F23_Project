@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ims.mapper.UserMapper" >
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ims.mapper.UserMapper">
+    <select id="emailExists" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM Users
+        WHERE email = #{email}
+    </select>
+
     <insert id="insert">
-        INSERT INTO Users (email, password) VALUES (#{email}, #{password})
+        INSERT INTO Users (email, password)
+        VALUES (#{email}, #{password})
     </insert>
+
+    <select id="getUser" resultType="com.ims.entity.Users">
+        SELECT email, password
+        FROM Users
+        WHERE email = #{email}
+    </select>
 
 </mapper>
