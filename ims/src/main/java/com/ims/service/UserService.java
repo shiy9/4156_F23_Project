@@ -7,5 +7,13 @@ public interface UserService {
     /**
      * Create User
      */
-    void createUser(Users user);
+    int createUser(Users user);
+
+    boolean isValidEmail(String email);
+
+    boolean isValidPassword(String password);
+
+    boolean userExist(String email);
+
+    Users getUser(String email);
 }
