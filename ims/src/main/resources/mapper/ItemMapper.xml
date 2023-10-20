@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ims.mapper.ItemMapper">
+    <resultMap id="itemMap" type="Item">
+        <id property="itemId" column="item_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="name" column="name"/>
+        <result property="currentStockLevel" column="current_stock_level"/>
+        <result property="description" column="description"/>
+        <result property="price" column="price"/>
+        <result property="barcode" column="barcode"/>
+    </resultMap>
+
+    <select id="getItemById" resultMap="itemMap">
+        SELECT item_id, user_id, name, current_stock_level, description, price, barcode
+        FROM Items
+        WHERE item_id = #{itemId}
+    </select>
+
+    <insert id="insert" parameterType="Item" useGeneratedKeys="true" keyProperty="itemId" keyColumn="item_id">
+        INSERT INTO Items (user_id, name, current_stock_level, description, price, barcode)
+        VALUES (#{userId}, #{name}, #{currentStockLevel}, #{description}, #{price}, #{barcode})
+    </insert>
+
+    <update id="update" parameterType="Item">
+        UPDATE Items
+        SET name = #{name}, current_stock_level = #{currentStockLevel}, description = #{description}, price = #{price}, barcode = #{barcode}
+        WHERE item_id = #{itemId}
+    </update>
+
+</mapper>

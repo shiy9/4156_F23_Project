@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ims.mapper.LocationMapper">
+
+    <resultMap id="locationMap" type="Location">
+        <id property="locationId" column="location_id"/>
+        <result property="name" column="name"/>
+        <result property="address1" column="address_1"/>
+        <result property="address2" column="address_2"/>
+        <result property="userId" column="user_id"/>
+    </resultMap>
+
+    <select id="getLocationById" resultMap="locationMap">
+        SELECT location_id, name, address_1, address_2, user_id
+        FROM Locations
+        WHERE location_id = #{locationId}
+    </select>
+
+    <insert id="insert" parameterType="Location" useGeneratedKeys="true" keyProperty="locationId" keyColumn="location_id">
+        INSERT INTO Locations (name, address_1, address_2, user_id)
+        VALUES (#{name}, #{address1}, #{address2}, #{userId})
+    </insert>
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ims.mapper.ItemLocationMapper">
+    <resultMap id="itemLocationMap" type="ItemLocation">
+        <!-- Both item_id and location_id together act as the primary key -->
+        <id property="itemId" column="item_id"/>
+        <id property="locationId" column="location_id"/>
+        <result property="quantityAtLocation" column="quantity_at_location"/>
+    </resultMap>
+
+    <select id="getItemLocationById" resultMap="itemLocationMap">
+        SELECT item_id, location_id, quantity_at_location
+        FROM ItemLocation
+        WHERE item_id = #{itemId} AND location_id = #{locationId}
+    </select>
+
+    <insert id="insert" parameterType="ItemLocation">
+        INSERT INTO ItemLocation (item_id, location_id, quantity_at_location)
+        VALUES (#{itemId}, #{locationId}, #{quantityAtLocation})
+    </insert>
+
+    <select id="getItemLocationsByItemId" resultMap="itemLocationMap">
+        SELECT * FROM ItemLocation WHERE item_id = #{itemId}
+    </select>
+
+    <select id="getItemLocationsByLocationId" resultMap="itemLocationMap">
+        SELECT * FROM ItemLocation WHERE location_id = #{locationId}
+    </select>
+</mapper>
