@@ -5,5 +5,5 @@ import com.ims.entity.Location;
 public interface LocationService {
     Location getLocationById(Integer locationId);
 
-    int insert(Location location);
+    String insert(Location location);
 }

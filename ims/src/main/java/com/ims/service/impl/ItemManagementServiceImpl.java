@@ -1,5 +1,6 @@
 package com.ims.service.impl;
 
+import com.ims.constants.ItemMessages;
 import com.ims.entity.Item;
 import com.ims.entity.ItemLocation;
 import com.ims.entity.Location;
@@ -31,15 +32,20 @@ public class ItemManagementServiceImpl implements ItemManagementService {
     }
 
     @Override
-    public int insertItem(Item item) {
-        return itemMapper.insert(item);
+    public String insertItem(Item item) {
+        if (itemMapper.insert(item) > 0) {
+            return ItemMessages.INSERT_SUCCESS;
+        }
+        return ItemMessages.INSERT_FAILURE;
     }
 
     @Override
-    public int updateItem(Item item) {
-        return itemMapper.update(item);
+    public String updateItem(Item item) {
+        if (itemMapper.update(item) > 0) {
+            return ItemMessages.UPDATE_SUCCESS;
+        }
+        return ItemMessages.UPDATE_FAILURE;
     }
-
 
     @Override
     public ItemLocation getItemLocationById(Integer itemId, Integer locationId) {
@@ -48,23 +54,28 @@ public class ItemManagementServiceImpl implements ItemManagementService {
 
     @Override
     @Transactional
-    public int insertItemLocation(ItemLocation itemLocation) {
+    public String insertItemLocation(ItemLocation itemLocation) {
         Integer itemId = itemLocation.getItemId();
         Integer locationId = itemLocation.getLocationId();
 
         Item item = itemMapper.getItemById(itemId);
+        if (item == null) {
+            return ItemMessages.INVALID_ITEM_ID;
+        }
         Location location = locationMapper.getLocationById(locationId);
-        if (item == null || location == null) {
-            return -1;
+        if (location == null) {
+            return ItemMessages.INVALID_LOCATION_ID;
         }
 
         int insertResult = itemLocationMapper.insert(itemLocation);
         if (insertResult > 0) {
             item.setCurrentStockLevel(item.getCurrentStockLevel() + itemLocation.getQuantityAtLocation());
-            return itemMapper.update(item);
+            if (itemMapper.update(item) > 0) {
+                return ItemMessages.INSERT_SUCCESS;
+            }
         }
 
-        return -1;
+        return ItemMessages.INSERT_FAILURE;
     }
 
     @Override

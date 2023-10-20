@@ -20,8 +20,8 @@
     </select>
 
     <insert id="insert" parameterType="Item" useGeneratedKeys="true" keyProperty="itemId" keyColumn="item_id">
-        INSERT INTO Items (user_id, name, current_stock_level, description, price, barcode)
-        VALUES (#{userId}, #{name}, #{currentStockLevel}, #{description}, #{price}, #{barcode})
+        INSERT INTO Items (item_id, user_id, name, current_stock_level, description, price, barcode)
+        VALUES (#{itemId}, #{userId}, #{name}, #{currentStockLevel}, #{description}, #{price}, #{barcode})
     </insert>
 
     <update id="update" parameterType="Item">

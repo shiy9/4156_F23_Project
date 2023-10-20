@@ -1,5 +1,6 @@
 package com.ims.controller;
 
+import com.ims.constants.ItemMessages;
 import com.ims.entity.Item;
 import com.ims.entity.ItemLocation;
 import com.ims.entity.Location;
@@ -30,12 +31,13 @@ public class ItemController {
     }
 
     @PostMapping(value="/location/create")
-    public ResponseEntity<Location> createLocation(@RequestBody Location location) {
-        int result = locationService.insert(location);
-        if (result > 0) {
-            return ResponseEntity.ok(location);
+    public ResponseEntity<String> createLocation(@RequestBody Location location) {
+        String result = locationService.insert(location);
+        if (result.equals(ItemMessages.INSERT_SUCCESS)) {
+            return ResponseEntity.ok(result);
         } else {
-            return ResponseEntity.badRequest().build();
+            // return the response entity with the error message in result
+            return ResponseEntity.badRequest().body(result);
         }
     }
 
@@ -50,12 +52,12 @@ public class ItemController {
     }
 
     @PostMapping(value="/item/create")
-    public ResponseEntity<Item> createItem(@RequestBody Item item) {
-        int result = itemManagementService.insertItem(item);
-        if (result > 0) {
-            return ResponseEntity.ok(item);
+    public ResponseEntity<String> createItem(@RequestBody Item item) {
+        String result = itemManagementService.insertItem(item);
+        if (result.equals(ItemMessages.INSERT_SUCCESS)) {
+            return ResponseEntity.ok(result);
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(result);
         }
     }
 
@@ -92,12 +94,13 @@ public class ItemController {
     }
 
     @PostMapping("/itemLocation/create")
-    public ResponseEntity<ItemLocation> createItemLocation(@RequestBody ItemLocation itemLocation) {
-        int result = itemManagementService.insertItemLocation(itemLocation);
-        if (result > 0) {
-            return ResponseEntity.ok(itemLocation);
+    public ResponseEntity<String> createItemLocation(@RequestBody ItemLocation itemLocation) {
+        String result = itemManagementService.insertItemLocation(itemLocation);
+        if (result.equals(ItemMessages.INSERT_SUCCESS)) {
+            return ResponseEntity.ok(result);
         } else {
-            return ResponseEntity.badRequest().build();
+            // return the response entity with the error message in result
+            return ResponseEntity.badRequest().body(result);
         }
     }
 }

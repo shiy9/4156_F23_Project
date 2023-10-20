@@ -8,13 +8,13 @@ import java.util.List;
 public interface ItemManagementService {
     Item getItemById(Integer itemId);
 
-    int insertItem(Item item);
+    String insertItem(Item item);
 
-    int updateItem(Item item);
+    String updateItem(Item item);
 
     ItemLocation getItemLocationById(Integer itemId, Integer locationId);
 
-    int insertItemLocation(ItemLocation itemLocation);
+    String insertItemLocation(ItemLocation itemLocation);
 
     List<ItemLocation> getItemLocationsByItemId(Integer itemId);
 

@@ -1,13 +1,12 @@
 package com.ims.service.impl;
 
+import com.ims.constants.ItemMessages;
 import com.ims.entity.Location;
 import com.ims.mapper.LocationMapper;
 import com.ims.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
 
 @Service
 public class LocationServiceImpl implements LocationService {
@@ -22,7 +21,10 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional
-    public int insert(Location location) {
-        return locationMapper.insert(location);
+    public String insert(Location location) {
+        if (locationMapper.insert(location) > 0) {
+            return ItemMessages.INSERT_SUCCESS;
+        }
+        return ItemMessages.INSERT_FAILURE;
     }
 }

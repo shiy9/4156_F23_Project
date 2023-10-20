@@ -19,8 +19,8 @@
     </select>
 
     <insert id="insert" parameterType="Location" useGeneratedKeys="true" keyProperty="locationId" keyColumn="location_id">
-        INSERT INTO Locations (name, address_1, address_2, user_id)
-        VALUES (#{name}, #{address1}, #{address2}, #{userId})
+        INSERT INTO Locations (location_id, name, address_1, address_2, user_id)
+        VALUES (#{locationId}, #{name}, #{address1}, #{address2}, #{userId})
     </insert>
 
 </mapper>
