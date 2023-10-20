@@ -5,9 +5,10 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://coms4156.ctxbce6x3frp.us-east-2.rds.amazonaws.com:3306/coms4156
-#    url: jdbc:mysql://google/coms4156?cloudSqlInstance=coms4156-402215:us-central1:iheartapi&socketFactory=com.google.cloud.sql.mysql.SocketFactory
+      #    url: jdbc:mysql://google/coms4156?cloudSqlInstance=coms4156-402215:us-central1:iheartapi&socketFactory=com.google.cloud.sql.mysql.SocketFactory
     username: admin
     password: 12345678
+
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
