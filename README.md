@@ -25,3 +25,40 @@
 - Note: in future iterations, we plan to have `login` return a stateful token and will be used to modify 
 database (such as adding an order, etc.). We will also support a `/user/logout` endpoint, which will
 invalidate the token.
+
+
+### Order-related
+#### **Create an Order**
+`/order/create`
+- **Method**: POST
+- **Request Body**: JSON containing order details (orderId, userId, type, itemId, itemLocationId, quantity, orderDate, amount, dueDate, returnDate, orderStatus)
+- **Expected Response**:
+  - Success message: "Order Created Successfully"
+
+#### **Update an Order**
+ `/order/update`
+- **Method**: PUT
+- **Request Body**: JSON containing order details to be updated (orderId must be present)
+- **Expected Response**:
+  - Success message: "Order Updated Successfully"
+
+#### **Delete an Order**
+  `/order/delete/{orderId}`
+- **Method**: POST
+- **Request Body**:  {orderId} - The ID of the order to be deleted
+- **Expected Response**:
+  - Success message: "Order Deleted Successfully"
+
+#### **Retrieve Orders by User ID**
+`/order/retrieve/user/{userId}`
+- **Method**: GET
+- **Request Body**:  {userId} - The ID of the user to retrieve orders for
+- **Expected Response**:
+  - List of orders associated with the provided user ID
+
+#### **Retrieve Orders by Item ID**
+`/order/retrieve/item/{itemId}`
+- **Method**: GET
+- **Request Body**:  {itemId} - The ID of the item to retrieve orders for
+- **Expected Response**:
+  List of orders associated with the provided item ID
