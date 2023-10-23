@@ -6,6 +6,13 @@
 - Jasmine Xin yx2810
 - Xirui Yao xy2571
 
+## Testing
+- Unit tests are in `ims/src/test/java/com/ims/`
+- To run all tests, `cd` into the `ims` directory, and run `mvn test` command. (We need to `cd` into the directory 
+  where the Maven configuration file `pom.xml` resides, or the command will fail.)
+  - Or, if using IntelliJ IDE, add a run configuration to the IDE or click the icon in respective unit test file to start running the tests.
+    This will currently give a nicer interface than `mvn test`, although the command can be configured in later iterations.
+
 ## API Endpoints
 ### User-related
 `/user/register`
