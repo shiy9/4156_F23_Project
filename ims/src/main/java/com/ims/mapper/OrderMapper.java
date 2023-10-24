@@ -1,31 +1,18 @@
 package com.ims.mapper;
 
 import com.ims.entity.Order;
-import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Repository;
-
+import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
-@Repository
+@Mapper
 public interface OrderMapper {
-
-    // Create order
-    @Insert("INSERT INTO `Order` (userId, type, itemId, itemLocationId, quantity, orderDate, amount, dueDate, returnDate, orderStatus) VALUES (#{userId}, #{type}, #{itemId}, #{itemLocationId}, #{quantity}, #{orderDate}, #{amount}, #{dueDate}, #{returnDate}, #{orderStatus})")
     int insert(Order order);
 
-    // Update order
-    @Update("UPDATE `Order` SET type=#{type}, itemId=#{itemId}, itemLocationId=#{itemLocationId}, quantity=#{quantity}, orderDate=#{orderDate}, amount=#{amount}, dueDate=#{dueDate}, returnDate=#{returnDate}, orderStatus=#{orderStatus} WHERE orderId=#{orderId}")
-    int update(Order order);
+    void update(Order order);
 
-    // Delete order
-    @Delete("DELETE FROM `Order` WHERE orderId=#{orderId}")
     int delete(Integer orderId);
 
-    // Retrieve orders by userID
-    @Select("SELECT * FROM `Order` WHERE userId=#{userId}")
-    List<Order> findOrdersByUserId(Integer userId);
+    List<Order> retrieveOrdersByUserId(Integer userId);
 
-    // Retrieve rental/purchase history for a certain item
-    @Select("SELECT * FROM `Order` WHERE itemId=#{itemId}")
-    List<Order> findOrdersByItemId(Integer itemId);
+    List<Order> retrieveOrdersByItemId(Integer itemId);
 }

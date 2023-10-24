@@ -2,10 +2,15 @@ package com.ims.controller;
 
 import com.ims.entity.Order;
 import com.ims.service.OrderService;
+import com.ims.constants.OrderMessages;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import org.springframework.http.HttpStatus;
+import java.util.Collections;
 
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -15,31 +20,41 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/create")
-    public String createOrder(@RequestBody Order order) {
+    public ResponseEntity<String> createOrder(@RequestBody Order order) {
         orderService.createOrder(order);
-        return "Order Created Successfully";
+        return ResponseEntity.ok(OrderMessages.CREATE_SUCCESS);
     }
 
     @PutMapping("/update")
-    public String updateOrder(@RequestBody Order order) {
+    public ResponseEntity<String> updateOrder(@RequestBody Order order) {
         orderService.updateOrder(order);
-        return "Order Updated Successfully";
+        return ResponseEntity.ok(OrderMessages.UPDATE_SUCCESS);
     }
 
     @DeleteMapping("/delete/{orderId}")
-    public String deleteOrder(@PathVariable Integer orderId) {
+    public ResponseEntity<String> deleteOrder(@PathVariable Integer orderId) {
         orderService.deleteOrder(orderId);
-        return "Order Deleted Successfully";
+        return ResponseEntity.ok(OrderMessages.DELETE_SUCCESS);
     }
 
     @GetMapping("/retrieve/user/{userId}")
-    public List<Order> getOrdersByUserId(@PathVariable Integer userId) {
-        return orderService.retrieveOrdersByUserId(userId);
+    public ResponseEntity<List<Order>> retrieveOrdersByUserId(@PathVariable Integer userId) {
+        List<Order> orders = orderService.retrieveOrdersByUserId(userId);
+        if (!orders.isEmpty()) {
+            return ResponseEntity.ok(orders);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @GetMapping("/retrieve/item/{itemId}")
-    public List<Order> getOrdersByItemId(@PathVariable Integer itemId) {
-        return orderService.retrieveOrdersByItemId(itemId);
+    public ResponseEntity<List<Order>> retrieveOrdersByItemId(@PathVariable Integer itemId) {
+        List<Order> orders = orderService.retrieveOrdersByItemId(itemId);
+        if (!orders.isEmpty()) {
+            return ResponseEntity.ok(orders);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }
 

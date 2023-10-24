@@ -31,11 +31,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> retrieveOrdersByUserId(Integer userId) {
-        return orderMapper.findOrdersByUserId(userId);
+        return orderMapper.retrieveOrdersByUserId(userId);
     }
 
     @Override
     public List<Order> retrieveOrdersByItemId(Integer itemId) {
-        return orderMapper.findOrdersByItemId(itemId);
+        return orderMapper.retrieveOrdersByItemId(itemId);
     }
 }
