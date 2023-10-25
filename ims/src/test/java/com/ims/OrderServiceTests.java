@@ -51,9 +51,9 @@ class OrderServiceTests {
 
         List<Order> orders = Arrays.asList(order1, order2);
 
-        when(orderMapperMock.findOrdersByUserId(1)).thenReturn(orders);
-        when(orderMapperMock.findOrdersByItemId(101)).thenReturn(Arrays.asList(order1));
-        when(orderMapperMock.findOrdersByItemId(102)).thenReturn(Arrays.asList(order2));
+        //when(orderMapperMock.findOrdersByUserId(1)).thenReturn(orders);
+        //when(orderMapperMock.findOrdersByItemId(101)).thenReturn(Arrays.asList(order1));
+        //when(orderMapperMock.findOrdersByItemId(102)).thenReturn(Arrays.asList(order2));
     }
 
     @Test

@@ -104,6 +104,35 @@ invalidate the token.
   - `200`: Item
   - `404`: Not Found
 
+`/item/getByUserId/{userId}`
+- **Method**: GET
+- **Request Body**:  {userId} - The userID of the user to retrieve items for
+- **Expected Response**:
+  - `200`: List of Items
+  - `404`: Not Found
+
+`/item/update`
+- **Method**: POST
+- **Request Body**: JSON containing item details to be updated (itemId must be present)
+- **Expected Response**:
+  - `200`: Update successful
+  - `400`: Update failed
+
+`/item/generateBarcode/{id}`
+- **Method**: GET
+- **Request Body**:  {id} - The itemID of the item to generate a barcode for
+- **Expected Response**:
+  - `200`: Generation success
+  - `400`: Generation failure
+
+`/item/barcode/{id}`
+- **Method**: GET
+- **Request Body**:  {id} - The itemID of the item to retrieve the barcode for
+- **Expected Response**:
+  - `200`: The barcode in PNG format
+  - `404`: Not Found
+
+
 `/itemLocation/create`
 - **Method**: POST
 - **Request Body**: JSON containing itemLocation details (itemId, locationId, quantityAtLocation)

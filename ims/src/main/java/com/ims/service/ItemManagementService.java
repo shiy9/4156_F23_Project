@@ -6,11 +6,15 @@ import com.ims.entity.ItemLocation;
 import java.util.List;
 
 public interface ItemManagementService {
-    Item getItemById(Integer itemId);
+    Item getItemByItemId(Integer itemId);
 
     String insertItem(Item item);
 
     String updateItem(Item item);
+
+    String generateBarcode(Item item) throws Exception;
+
+    List<Item> getItemsByUserId(Integer userId);
 
     ItemLocation getItemLocationById(Integer itemId, Integer locationId);
 

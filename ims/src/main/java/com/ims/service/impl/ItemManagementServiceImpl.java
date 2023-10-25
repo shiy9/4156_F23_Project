@@ -1,5 +1,9 @@
 package com.ims.service.impl;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 import com.ims.constants.ItemMessages;
 import com.ims.entity.Item;
 import com.ims.entity.ItemLocation;
@@ -12,11 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayOutputStream;
+import java.util.Base64;
 import java.util.List;
 
 @Service
 public class ItemManagementServiceImpl implements ItemManagementService {
-
     @Autowired
     private ItemLocationMapper itemLocationMapper;
 
@@ -27,8 +32,8 @@ public class ItemManagementServiceImpl implements ItemManagementService {
     private LocationMapper locationMapper;
 
     @Override
-    public Item getItemById(Integer itemId) {
-        return itemMapper.getItemById(itemId);
+    public Item getItemByItemId(Integer itemId) {
+        return itemMapper.getItemByItemId(itemId);
     }
 
     @Override
@@ -48,6 +53,36 @@ public class ItemManagementServiceImpl implements ItemManagementService {
     }
 
     @Override
+    public String generateBarcode(Item item) throws Exception {
+        if (item.getBarcode() != null) {
+            return ItemMessages.BARCODE_ALREADY_EXISTS;
+        }
+
+        BarcodeFormat barcodeFormat = BarcodeFormat.CODE_128;
+        int width = 300;
+        int height = 150;
+
+        // If we scan the barcode, we will see the item name and description
+        String data = item.getName() + ": " + item.getDescription();
+        BitMatrix bitMatrix = new MultiFormatWriter().encode(data, barcodeFormat, width, height);
+        ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
+        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
+
+        byte[] bytes = pngOutputStream.toByteArray();
+        item.setBarcode((Base64.getEncoder().encodeToString(bytes)));
+
+        if (itemMapper.update(item) > 0) {
+            return ItemMessages.BARCODE_GENERATION_SUCCESS;
+        }
+        return ItemMessages.BARCODE_GENERATION_FAILURE;
+    }
+
+    @Override
+    public List<Item> getItemsByUserId(Integer userId) {
+        return itemMapper.getItemsByUserId(userId);
+    }
+
+    @Override
     public ItemLocation getItemLocationById(Integer itemId, Integer locationId) {
         return itemLocationMapper.getItemLocationById(itemId, locationId);
     }
@@ -58,7 +93,7 @@ public class ItemManagementServiceImpl implements ItemManagementService {
         Integer itemId = itemLocation.getItemId();
         Integer locationId = itemLocation.getLocationId();
 
-        Item item = itemMapper.getItemById(itemId);
+        Item item = itemMapper.getItemByItemId(itemId);
         if (item == null) {
             return ItemMessages.INVALID_ITEM_ID;
         }

@@ -13,10 +13,16 @@
         <result property="barcode" column="barcode"/>
     </resultMap>
 
-    <select id="getItemById" resultMap="itemMap">
+    <select id="getItemByItemId" resultMap="itemMap">
         SELECT item_id, user_id, name, current_stock_level, description, price, barcode
         FROM Items
         WHERE item_id = #{itemId}
+    </select>
+
+    <select id="getItemsByUserId" resultMap="itemMap">
+        SELECT *
+        FROM Items
+        WHERE user_id = #{userId}
     </select>
 
     <insert id="insert" parameterType="Item" useGeneratedKeys="true" keyProperty="itemId" keyColumn="item_id">
