@@ -1,18 +1,22 @@
 package com.ims.mapper;
 
 import com.ims.entity.Order;
-import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 
+
+/**
+ * Mapper interface for Order operations.
+ */
 @Mapper
 public interface OrderMapper {
-    int insert(Order order);
+  int insert(Order order);
 
-    void update(Order order);
+  void update(Order order);
 
-    int delete(Integer orderId);
+  int delete(Integer orderId);
 
-    List<Order> retrieveOrdersByUserId(Integer userId);
+  List<Order> retrieveOrdersByUserId(Integer userId);
 
-    List<Order> retrieveOrdersByItemId(Integer itemId);
+  List<Order> retrieveOrdersByItemId(Integer itemId);
 }
