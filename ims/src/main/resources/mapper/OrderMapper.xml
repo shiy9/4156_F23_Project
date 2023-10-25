@@ -18,31 +18,31 @@
     </resultMap>
 
     <select id="retrieveOrderById" resultMap="orderMap">
-        SELECT order_id, user_id, type, item_id, item_location_id, quantity, order_date, amount, due_date, return_date, order_status
+        SELECT order_id, user_id, type, order_date, order_status
         FROM Orders
         WHERE order_id = #{orderId}
     </select>
 
     <select id="retrieveOrdersByUserId" resultMap="orderMap">
-        SELECT order_id, user_id, type, item_id, item_location_id, quantity, order_date, amount, due_date, return_date, order_status
+        SELECT order_id, user_id, type, order_date, order_status
         FROM Orders
         WHERE user_id = #{userId}
     </select>
 
     <select id="retrieveOrdersByItemId" resultMap="orderMap">
-        SELECT order_id, user_id, type, item_id, item_location_id, quantity, order_date, amount, due_date, return_date, order_status
+        SELECT order_id, user_id, type, order_date, order_status
         FROM Orders
         WHERE item_id = #{itemId}
     </select>
 
     <insert id="insert" parameterType="Order" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">
-        INSERT INTO Orders (user_id, type, item_id, item_location_id, quantity, order_date, amount, due_date, return_date, order_status)
-        VALUES (#{userId}, #{type}, #{itemId}, #{itemLocationId}, #{quantity}, #{orderDate}, #{amount}, #{dueDate}, #{returnDate}, #{orderStatus})
+        INSERT INTO Orders (user_id, type, order_date, order_status)
+        VALUES (#{userId}, #{type}, #{orderDate}, #{orderStatus})
     </insert>
 
     <update id="update" parameterType="Order">
         UPDATE Orders
-        SET user_id = #{userId}, type = #{type}, item_id = #{itemId}, item_location_id = #{itemLocationId}, quantity = #{quantity}, order_date = #{orderDate}, amount = #{amount}, due_date = #{dueDate}, return_date = #{returnDate}, order_status = #{orderStatus}
+        SET user_id = #{userId}, type = #{type}, order_date = #{orderDate}, order_status = #{orderStatus}
         WHERE order_id = #{orderId}
     </update>
 

@@ -61,7 +61,6 @@ public class OrderControllerTests {
     Order mockOrder = new Order();
     mockOrder.setOrderId(1);
     mockOrder.setUserId(1);
-    mockOrder.setItemId(101);
     mockOrder.setOrderStatus("PENDING");
     List<Order> mockOrders = Collections.singletonList(mockOrder);
     when(orderService.retrieveOrdersByUserId(1)).thenReturn(mockOrders);
@@ -76,7 +75,7 @@ public class OrderControllerTests {
   @Test
   public void updateOrderTest() throws Exception {
     String updatedOrderJson =
-            "{ \"id\": 1, \"userId\": 1, \"itemId\": 101, \"orderStatus\": \"SHIPPED\" }";
+            "{ \"id\": 1, \"userId\": 1, \"orderStatus\": \"SHIPPED\" }";
     doNothing().when(orderService).updateOrder(any());
 
     mockMvc.perform(MockMvcRequestBuilders.put("/order/update")
