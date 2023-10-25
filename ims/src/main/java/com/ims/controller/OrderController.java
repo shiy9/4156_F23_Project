@@ -59,20 +59,4 @@ public class OrderController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
   }
-
-  /**
-   * Endpoint to retrieve orders by item ID.
-   *
-   * @param itemId The item's ID.
-   * @return ResponseEntity containing a list of orders associated with the item ID.
-   */
-  @GetMapping("/retrieve/item/{itemId}")
-  public ResponseEntity<List<Order>> retrieveOrdersByItemId(@PathVariable Integer itemId) {
-    List<Order> orders = orderService.retrieveOrdersByItemId(itemId);
-    if (!orders.isEmpty()) {
-      return ResponseEntity.ok(orders);
-    } else {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-  }
 }

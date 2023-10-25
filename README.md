@@ -42,35 +42,29 @@ invalidate the token.
 - **Method**: POST
 - **Request Body**: JSON containing order details (orderId, userId, type, itemId, itemLocationId, quantity, orderDate, amount, dueDate, returnDate, orderStatus)
 - **Expected Response**:
-  - Success message: "Order Created Successfully"
+  - `200`: Order Created Successfully
 
 #### **Update an Order**
 `/order/update`
 - **Method**: PUT
 - **Request Body**: JSON containing order details to be updated (orderId must be present)
 - **Expected Response**:
-  - Success message: "Order Updated Successfully"
+  - `200`: Order Updated Successfully
 
 #### **Delete an Order**
 `/order/delete/{orderId}`
 - **Method**: POST
 - **Request Body**:  {orderId} - The ID of the order to be deleted
 - **Expected Response**:
-  - Success message: "Order Deleted Successfully"
+  - `200`: Order Deleted Successfully
 
 #### **Retrieve Orders by User ID**
 `/order/retrieve/user/{userId}`
 - **Method**: GET
 - **Request Body**:  {userId} - The ID of the user to retrieve orders for
 - **Expected Response**:
-  - List of orders associated with the provided user ID
-
-#### **Retrieve Orders by Item ID**
-`/order/retrieve/item/{itemId}`
-- **Method**: GET
-- **Request Body**:  {itemId} - The ID of the item to retrieve orders for
-- **Expected Response**:
-  List of orders associated with the provided item ID
+  - - `200`: List of orders associated with the provided user ID
+    - `404`: No orders found for the provided user ID
 
 &nbsp;
 <br>
