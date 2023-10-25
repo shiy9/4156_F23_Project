@@ -50,8 +50,8 @@ public class OrderControllerTests {
     doNothing().when(orderService).createOrder(any());
 
     mockMvc.perform(MockMvcRequestBuilders.post("/order/create")
-                    .contentType("application/json")
-                    .content(orderJson))
+            .contentType("application/json")
+            .content(orderJson))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().string(OrderMessages.CREATE_SUCCESS));
   }
@@ -65,11 +65,12 @@ public class OrderControllerTests {
     List<Order> mockOrders = Collections.singletonList(mockOrder);
     when(orderService.retrieveOrdersByUserId(1)).thenReturn(mockOrders);
 
-    mockMvc.perform(MockMvcRequestBuilders.post("/order/create")
-                    .contentType("application/json")
-                    .content(orderJson))
+    mockMvc.perform(MockMvcRequestBuilders.get("/order/retrieve/user/1")
+            .contentType("application/json"))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().string(OrderMessages.CREATE_SUCCESS));
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].orderId").value(1))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].userId").value(1))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].orderStatus").value("PENDING"));
   }
 
   @Test
@@ -79,8 +80,8 @@ public class OrderControllerTests {
     doNothing().when(orderService).updateOrder(any());
 
     mockMvc.perform(MockMvcRequestBuilders.put("/order/update")
-                    .contentType("application/json")
-                    .content(updatedOrderJson))
+            .contentType("application/json")
+            .content(updatedOrderJson))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().string(OrderMessages.UPDATE_SUCCESS));
   }
