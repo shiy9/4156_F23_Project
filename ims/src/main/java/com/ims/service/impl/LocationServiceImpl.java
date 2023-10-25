@@ -11,20 +11,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class LocationServiceImpl implements LocationService {
 
-    @Autowired
-    private LocationMapper locationMapper;
+  @Autowired
+  private LocationMapper locationMapper;
 
-    @Override
-    public Location getLocationById(Integer locationId) {
-        return locationMapper.getLocationById(locationId);
-    }
+  @Override
+  public Location getLocationById(Integer locationId) {
+    return locationMapper.getLocationById(locationId);
+  }
 
-    @Override
-    @Transactional
-    public String insert(Location location) {
-        if (locationMapper.insert(location) > 0) {
-            return ItemMessages.INSERT_SUCCESS;
-        }
-        return ItemMessages.INSERT_FAILURE;
+  @Override
+  @Transactional
+  public String insert(Location location) {
+    if (locationMapper.insert(location) > 0) {
+      return ItemMessages.INSERT_SUCCESS;
     }
+    return ItemMessages.INSERT_FAILURE;
+  }
 }

@@ -5,8 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface LocationMapper {
-    Location getLocationById(Integer locationId);
+  Location getLocationById(Integer locationId);
 
-    int insert(Location location);
+  int insert(Location location);
 
 }
