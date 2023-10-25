@@ -12,7 +12,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Implements Item-related REST API.
@@ -25,6 +29,11 @@ public class ItemController {
   @Autowired
   private ItemManagementService itemManagementService;
 
+  /**
+   * Endpoint to retrieve location by ID.
+   * @param id The location ID.
+   * @return ResponseEntity containing the location object.
+   */
   @GetMapping("/location/get/{id}")
   public ResponseEntity<Location> getLocationById(@PathVariable Integer id) {
     Location location = locationService.getLocationById(id);
@@ -35,6 +44,11 @@ public class ItemController {
     }
   }
 
+  /**
+   * Endpoint create a location
+   * @param location The location object.
+   * @return The response entity containing the result of the operation.
+   */
   @PostMapping("/location/create")
   public ResponseEntity<String> createLocation(@RequestBody Location location) {
     String result = locationService.insert(location);
@@ -46,6 +60,11 @@ public class ItemController {
     }
   }
 
+  /**
+   * Endpoint to retrieve item by ID.
+   * @param id The item ID.
+   * @return ResponseEntity containing the item object.
+   */
   @GetMapping("/item/get/{id}")
   public ResponseEntity<Item> getItemByItemId(@PathVariable Integer id) {
     Item item = itemManagementService.getItemByItemId(id);
@@ -56,6 +75,12 @@ public class ItemController {
     }
   }
 
+
+  /**
+   * Endpoint to retrieve a list of items by user ID.
+   * @param userId
+   * @return ResponseEntity containing a list of items associated with the user ID.
+   */
   @GetMapping("/item/getByUserId/{userId}")
   public ResponseEntity<List<Item>> getItemsByUserId(@PathVariable Integer userId) {
     List<Item> items = itemManagementService.getItemsByUserId(userId);
@@ -66,6 +91,11 @@ public class ItemController {
     }
   }
 
+  /**
+   * Endpoint to create an item.
+   * @param Item The item object.
+   * @return ResponseEntity containing the result of the operation.
+   */
   @PostMapping("/item/create")
   public ResponseEntity<String> createItem(@RequestBody Item item) {
     String result = itemManagementService.insertItem(item);
