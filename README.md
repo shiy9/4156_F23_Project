@@ -40,7 +40,7 @@ invalidate the token.
 #### **Create an Order**
 `/order/create`
 - **Method**: POST
-- **Request Body**: JSON containing order details (orderId, userId, type, itemId, itemLocationId, quantity, orderDate, amount, dueDate, returnDate, orderStatus)
+- **Request Body**: JSON containing order details (orderId, userId, type, orderDate, orderStatus)
 - **Expected Response**:
   - `200`: Order Created Successfully
 
