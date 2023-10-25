@@ -8,25 +8,25 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserMapper {
-    /**
-     * Check if email already exists in the database.
-     */
-    boolean emailExists(String email);
+  /**
+   * Check if email already exists in the database.
+   */
+  boolean emailExists(String email);
 
-    /**
-     * Insert use into database
-     * This function does not offer any error checking as they should have been done beforehand.
-     */
-    int insert(Users user);
+  /**
+   * Insert use into database
+   * This function does not offer any error checking as they should have been done beforehand.
+   */
+  int insert(Users user);
 
-    /**
-     * Attempts to find the user. Used in the login process.
-     */
-    Users getUser(String email);
+  /**
+   * Attempts to find the user. Used in the login process.
+   */
+  Users getUser(String email);
 
-    /**
-     * FOR TESTING PURPOSE ONLY
-     * DELETE the row associated with {email}
-     */
-    void testDeleteByEmail(String email);
+  /**
+   * FOR TESTING PURPOSE ONLY.
+   * DELETE the row associated with {email}
+   */
+  void testDeleteByEmail(String email);
 }
