@@ -6,12 +6,22 @@
 - Jasmine Xin yx2810
 - Xirui Yao xy2571
 
+## Getting Started
+- `git clone` the project.
+- `Open` the project with IntelliJ IDE. The IDE should be able to detect the Maven configuration
+file (`pom.xml`) and prompt to configure Maven at the bottom right corner. Click the button to configure Maven.
+  - Alternatively, run `mvn clean install` to install all needed dependencies to run the project
+    (although the IDE configuration has always worked for our team).
+- To start the application and run Postman requests, start the `ImsApplication` on the top right
+corner of the IDE, which will start running the server at `http://localhost:8001`.
+  - Alternatively, right click on `ims/src/main/java/com/ims/ImsApplication.java` and click the run button.
+
 ## Testing
 - Unit tests are in `ims/src/test/java/com/ims/`
-- To run all tests, `cd` into the `ims` directory, and run `mvn test` command. (We need to `cd` into the directory 
-  where the Maven configuration file `pom.xml` resides, or the command will fail.)
-  - Or, if using IntelliJ IDE, add a run configuration to the IDE or click the icon in respective unit test file to start running the tests.
-    This will currently give a nicer interface than `mvn test`, although the command can be configured in later iterations.
+- To run all tests, in the IntelliJ IDE, right click on `ims/src/test/java/com/ims/` and click `Run Tests in ims`. This will currently give a nicer interface than the method below, although the command can be configured in later iterations.
+  - Or, `cd` into the `ims` directory, and run `mvn test` in the terminal. (We need to `cd` into the directory 
+    where the Maven configuration file `pom.xml` resides, or the command will fail.)
+    
 
 ## API Endpoints
 ### User-related
@@ -161,4 +171,6 @@ adding the quantityAtLocation to the current_stock_level.
   - `200`: List of ItemLocations
   - `404`: Not Found
 
+## Style Checker
+- We are using the CheckStyle plugin on IntelliJ to check for potential style warning/errors.
 
