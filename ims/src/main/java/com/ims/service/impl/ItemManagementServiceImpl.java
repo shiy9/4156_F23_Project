@@ -19,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+/**
+ * Implementation of various Item Management Service functions.
+ */
 @Service
 public class ItemManagementServiceImpl implements ItemManagementService {
   @Autowired
