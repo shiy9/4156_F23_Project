@@ -1,8 +1,8 @@
 package com.ims.service.impl;
 
-import com.ims.entity.Users;
-import com.ims.mapper.UserMapper;
-import com.ims.service.UserService;
+import com.ims.entity.Client;
+import com.ims.mapper.ClientMapper;
+import com.ims.service.ClientService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * Implementation of various User Service functions.
+ * Implementation of various Client Service functions.
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class ClientServiceImpl implements ClientService {
   @Autowired
-  private UserMapper userMapper;
+  private ClientMapper clientMapper;
 
   private static final String EMAIL_REGEX = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 
@@ -42,22 +42,22 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public int createUser(Users user) {
-    return userMapper.insert(user);
+  public int createClient(Client client) {
+    return clientMapper.insert(client);
   }
 
   @Override
-  public boolean userExist(String email) {
-    return userMapper.emailExists(email);
+  public boolean clientExist(String email) {
+    return clientMapper.emailExists(email);
   }
 
   @Override
-  public Users getUser(String email) {
-    return userMapper.getUser(email);
+  public Client getClient(String email) {
+    return clientMapper.getClient(email);
   }
 
   @Override
   public void testDeleteByEmail(String email) {
-    userMapper.testDeleteByEmail(email);
+    clientMapper.testDeleteByEmail(email);
   }
 }

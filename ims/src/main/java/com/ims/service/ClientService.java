@@ -1,16 +1,17 @@
 package com.ims.service;
 
-import com.ims.entity.Users;
+import com.ims.entity.Client;
 
 /**
- * Declares the functions related to User service. Implementations are in ./impl/UserServiceImpl.
+ * Declares the functions related to Client service. Implementations are in
+ * ./impl/ClientServiceImpl.
  */
-public interface UserService {
+public interface ClientService {
 
   /**
-   * Inserts user into the database (uses UserMapper's insert() method).
+   * Inserts client into the database (uses ClientMapper's insert() method).
    */
-  int createUser(Users user);
+  int createClient(Client client);
 
   /**
    * Validates the format of the email provided using a regex expression.
@@ -25,21 +26,21 @@ public interface UserService {
   boolean isValidPassword(String password);
 
   /**
-   * Check if the user exists in the database. Used by the register process
-   * Uses UserMapper's emailExists() method.
+   * Check if the client exists in the database. Used by the register process
+   * Uses ClientMapper's emailExists() method.
    */
-  boolean userExist(String email);
+  boolean clientExist(String email);
 
   /**
-   * Attempt to get the information of the user in the database. Used by the login process
-   * for password verification. Uses UserMapper's getUser() method.
+   * Attempt to get the information of the client in the database. Used by the login process
+   * for password verification. Uses ClientMapper's getClient() method.
    */
-  Users getUser(String email);
+  Client getClient(String email);
 
   /**
    * FOR TESTING PURPOSE ONLY
    * Delete the row of data associated with email.
-   * Uses UserMapper's testDeleteByEmail() function.
+   * Uses ClientMapper's testDeleteByEmail() function.
    * Should NOT be present in the final version of the project.
    */
   void testDeleteByEmail(String email);

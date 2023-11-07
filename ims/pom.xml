@@ -56,6 +56,7 @@
             <version>1.10.0</version>
         </dependency>
 
+        <!-- Password encryption -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-crypto</artifactId>
@@ -71,6 +72,32 @@
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
             <version>3.4.1</version> <!-- Check for the latest version -->
+        </dependency>
+
+        <!-- JWT token dependency -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.1</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- For MVCResult -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.3.30</version>
         </dependency>
 
     </dependencies>

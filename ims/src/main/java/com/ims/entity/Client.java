@@ -5,10 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * The User entity. This class will reflect the User entity stored in the database.
+ * The Client entity. This class will reflect the Client entity stored in the database.
  */
 @Data
-public class Users {
+public class Client {
   @Getter
   @Setter
   private String email;

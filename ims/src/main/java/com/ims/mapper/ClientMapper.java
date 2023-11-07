@@ -1,13 +1,13 @@
 package com.ims.mapper;
 
-import com.ims.entity.Users;
+import com.ims.entity.Client;
 import org.springframework.stereotype.Repository;
 
 /**
- * Specific queries are linked in ims/src/main/resources/mapper/UserMapper.xml
+ * Specific queries are linked in ims/src/main/resources/mapper/ClientMapper.xml
  */
 @Repository
-public interface UserMapper {
+public interface ClientMapper {
   /**
    * Check if email already exists in the database.
    */
@@ -17,12 +17,12 @@ public interface UserMapper {
    * Insert use into database
    * This function does not offer any error checking as they should have been done beforehand.
    */
-  int insert(Users user);
+  int insert(Client client);
 
   /**
-   * Attempts to find the user. Used in the login process.
+   * Attempts to find the client. Used in the login process.
    */
-  Users getUser(String email);
+  Client getClient(String email);
 
   /**
    * FOR TESTING PURPOSE ONLY.
