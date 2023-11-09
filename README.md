@@ -24,24 +24,34 @@ corner of the IDE, which will start running the server at `http://localhost:8001
     
 
 ## API Endpoints
-### User-related
-`/user/register`
+### Client-related
+`/client/register`
 - **Method**: POST
-- **Request Body**: JSON containing user `email` and `password`
+- **Request Body**: JSON containing client `email` and `password`
 - **Expected Response**:
-  - `201`: registration successful, and user is logged into the database
-  - `400`: registration failed (maybe due to email already in-use, invalid email and password formats. See response body for more information)
+  - Response body is a message indicating whether the request succeeded or failed.
+  - Response codes:
+    - `201`: registration successful, and user is logged into the database
+    - `400`: registration failed (maybe due to email already in-use, invalid email and password formats. See response body for more information)
 
-`/user/login`
+`/client/login`
 - **Method**: POST
-- **Request Body**: JSON containing user `email` and `password`
+- **Request Body**: JSON containing client `email` and `password`
 - **Expected Response**:
+  - Response body is a JSON object with the following structure:
+    - ```json
+      {
+        "message": "message explaining request status",
+        "token": "authentication_token"
+      }
+      ```
+    - The response body will NOT contain a token if login was not successful.
+  - Response codes:
     - `200`: login success
     - `401`: login failed, password mismatch
-    - `404`: login failed, user does not exist
-- Note: in future iterations, we plan to have `login` return a stateful token and will be used to modify 
-database (such as adding an order, etc.). We will also support a `/user/logout` endpoint, which will
-invalidate the token.
+    - `404`: login failed, client does not exist
+- The application using the service will be responsible for storing the token as it will be 
+  needed to complete Order-related and Item-related operations.
 
 &nbsp;
 <br>
@@ -163,7 +173,6 @@ adding the quantityAtLocation to the current_stock_level.
   - `200`: List of ItemLocations
   - `404`: Not Found
 
-
 `/itemLocation/getByItemId/{itemId}`
 - **Method**: GET
 - **Request Body**: {itemId} - The itemID of the item to retrieve
@@ -174,3 +183,11 @@ adding the quantityAtLocation to the current_stock_level.
 ## Style Checker
 - We are using the CheckStyle plugin on IntelliJ to check for potential style warning/errors.
 
+## References
+### Resources used when implementing JWT token
+- https://jwt.io/libraries
+- https://github.com/jwtk/jjwt
+### Resources used when implementing Client-related code
+- For [password regex](https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a)
+- For [email regex](https://regexr.com/3e48o)
+- For password encoder (BCrypt): [link1](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/crypto/bcrypt/BCrypt.html), [link2](https://www.educative.io/answers/how-does-the-bcrypt-encoding-scheme-work-in-spring-security)
