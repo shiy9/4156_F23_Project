@@ -45,7 +45,7 @@ public class ItemController {
   }
 
   /**
-   * Endpoint create a location
+   * Endpoint create a location.
    * @param location The location object.
    * @return The response entity containing the result of the operation.
    */
@@ -75,10 +75,9 @@ public class ItemController {
     }
   }
 
-
   /**
    * Endpoint to retrieve a list of items by user ID.
-   * @param userId
+   * @param userId The user ID.
    * @return ResponseEntity containing a list of items associated with the user ID.
    */
   @GetMapping("/item/getByUserId/{userId}")
@@ -93,7 +92,7 @@ public class ItemController {
 
   /**
    * Endpoint to create an item.
-   * @param Item The item object.
+   * @param item The item object.
    * @return ResponseEntity containing the result of the operation.
    */
   @PostMapping("/item/create")
@@ -106,6 +105,11 @@ public class ItemController {
     }
   }
 
+  /**
+   * Endpoint to update an item.
+   * @param item The item object.
+   * @return ResponseEntity containing the result of the operation.
+   */
   @PostMapping("/item/update")
   public ResponseEntity<String> updateItem(@RequestBody Item item) {
     String result = itemManagementService.updateItem(item);
@@ -116,6 +120,11 @@ public class ItemController {
     }
   }
 
+  /**
+   * Endpoint to generate a barcode for an item.
+   * @param id The item ID.
+   * @return ResponseEntity containing the result of the operation.
+   */
   @GetMapping("/item/generateBarcode/{id}")
   public ResponseEntity<String> generateBarcode(@PathVariable Integer id) {
     Item item = itemManagementService.getItemByItemId(id);
@@ -135,6 +144,11 @@ public class ItemController {
     }
   }
 
+  /**
+   * Endpoint to retrieve the barcode image for an item.
+   * @param id The item ID.
+   * @return ResponseEntity containing the barcode image in png format.
+   */
   @GetMapping("/item/barcode/{id}")
   public ResponseEntity<byte[]> getBarcodeImage(@PathVariable("id") Integer id) {
     Item item = itemManagementService.getItemByItemId(id);
@@ -154,6 +168,12 @@ public class ItemController {
     return new ResponseEntity<>(barcodeImage, headers, HttpStatus.OK);
   }
 
+  /**
+   * Endpoint to retrieve item location by item ID and location ID.
+   * @param itemId The item ID.
+   * @param locationId The location ID.
+   * @return ResponseEntity containing the item location object.
+   */
   @GetMapping("/itemLocation/get/{itemId}/{locationId}")
   public ResponseEntity<ItemLocation> getItemLocationById(@PathVariable Integer itemId,
                                                           @PathVariable Integer locationId) {
@@ -165,6 +185,11 @@ public class ItemController {
     }
   }
 
+  /**
+   * Endpoint to retrieve item locations by item ID.
+   * @param itemId The item ID.
+   * @return ResponseEntity containing a list of item location objects.
+   */
   @GetMapping("/itemLocation/getByItemId/{itemId}")
   public ResponseEntity<List<ItemLocation>> getItemLocationsByItemId(@PathVariable Integer itemId) {
     List<ItemLocation> itemLocations = itemManagementService.getItemLocationsByItemId(itemId);
@@ -175,6 +200,11 @@ public class ItemController {
     }
   }
 
+  /**
+   * Endpoint to retrieve item locations by location ID.
+   * @param locationId The location ID.
+   * @return ResponseEntity containing a list of item location objects.
+   */
   @GetMapping("/itemLocation/getByLocationId/{locationId}")
   public ResponseEntity<List<ItemLocation>> getItemLocationsByLocationId(@PathVariable Integer locationId) {
     List<ItemLocation> itemLocations = itemManagementService.getItemLocationsByLocationId(locationId);
@@ -185,6 +215,11 @@ public class ItemController {
     }
   }
 
+  /**
+   * Endpoint to create an item location.
+   * @param itemLocation The item location object.
+   * @return ResponseEntity containing the result of the operation.
+   */
   @PostMapping("/itemLocation/create")
   public ResponseEntity<String> createItemLocation(@RequestBody ItemLocation itemLocation) {
     String result = itemManagementService.insertItemLocation(itemLocation);

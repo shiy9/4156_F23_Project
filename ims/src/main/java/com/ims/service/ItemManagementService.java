@@ -4,6 +4,10 @@ import com.ims.entity.Item;
 import com.ims.entity.ItemLocation;
 import java.util.List;
 
+/**
+ * The ItemManagementService interface defines all public business behaviors for operations on the
+ * Item entity model and some related entities such as ItemLocation.
+ */
 public interface ItemManagementService {
   Item getItemByItemId(Integer itemId);
 
