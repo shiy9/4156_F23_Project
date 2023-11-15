@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ims.mapper.OrderDetailMapper">
+    <resultMap id="orderDetailMap" type="OrderDetail">
+        <id property="orderId" column="order_id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="amount" column="amount"/>
+        <result property="dueDate" column="due_date"/>
+    </resultMap>
+
+    <select id="retrieveOrderDetailByOrderId" resultMap="orderDetailMap">
+        SELECT order_id, item_id, quantity, amount, due_date
+        FROM OrderDetail
+        WHERE order_id = #{orderId}
+    </select>
+
+
+    <select id="retrieveOrderDetailByItemId" resultMap="orderDetailMap">
+        SELECT order_id, item_id, quantity, amount, due_date
+        FROM OrderDetail
+        WHERE item_id = #{itemId}
+    </select>
+
+    <insert id="insert" parameterType="OrderDetail" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">
+        INSERT INTO OrderDetail (order_id, item_id, quantity, amount, due_date)
+        VALUES (#{item_id}, #{quantity}, #{amount}, #{due_date})
+    </insert>
+
+    <update id="update" parameterType="OrderDetail">
+        UPDATE OrderDetail
+        SET item_id = #{item_Id}, quantity = #{quantity}, amount = #{amount}, due_date = #{due_date}
+        WHERE order_id = #{orderId}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM OrderDetail WHERE order_id = #{orderId}
+    </delete>
+</mapper>
