@@ -15,3 +15,7 @@ mybatis:
   type-aliases-package: com.ims.entity
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+google:
+  maps:
+    api-key: AIzaSyA3ZVkywYSxyFXqvfV5mYyTRx59Wrzt11s

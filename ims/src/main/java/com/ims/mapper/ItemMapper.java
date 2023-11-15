@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ItemMapper {
   Item getItemByItemId(Integer itemId);
 
-  List<Item> getItemsByUserId(Integer userId);
+  List<Item> getItemsByClientId(Integer clientId);
 
   int insert(Item item);
 

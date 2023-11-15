@@ -12,6 +12,8 @@ public final class ItemMessages {
 
   public static final String INVALID_LOCATION_ID = "Invalid location id";
 
+  public static final String INVALID_ZIP_CODE = "Invalid zip code";
+
   public static final String INSERT_SUCCESS = "Insert successful";
 
   public static final String INSERT_FAILURE = "Insert failed";

@@ -24,6 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class ItemManagementServiceImpl implements ItemManagementService {
+
+  private static final double EARTH_RADIUS = 3958.8; // Radius in miles
+
   @Autowired
   private ItemLocationMapper itemLocationMapper;
 
@@ -80,8 +83,8 @@ public class ItemManagementServiceImpl implements ItemManagementService {
   }
 
   @Override
-  public List<Item> getItemsByUserId(Integer userId) {
-    return itemMapper.getItemsByUserId(userId);
+  public List<Item> getItemsByClientId(Integer clientId) {
+    return itemMapper.getItemsByClientId(clientId);
   }
 
   @Override
@@ -123,6 +126,52 @@ public class ItemManagementServiceImpl implements ItemManagementService {
   @Override
   public List<ItemLocation> getItemLocationsByLocationId(Integer locationId) {
     return itemLocationMapper.getItemLocationsByLocationId(locationId);
+  }
+
+  @Override
+  public List<ItemLocation> getItemLocationsWithin50Miles(Integer itemId, Integer locationId) {
+    List<ItemLocation> allItemLocations = itemLocationMapper.getItemLocationsByItemId(itemId);
+    Location givenLocation = locationMapper.getLocationById(locationId);
+
+    for (ItemLocation itemLocation : allItemLocations) {
+      if (itemLocation.getLocationId() == locationId || itemLocation.getQuantityAtLocation() == 0) {
+        allItemLocations.remove(itemLocation);
+        continue;
+      }
+
+      Location location = locationMapper.getLocationById(itemLocation.getLocationId());
+      Double distance = haversineDistance(givenLocation, location);
+      if (distance > 50) {
+        allItemLocations.remove(itemLocation);
+      }
+    }
+
+    return allItemLocations;
+  }
+
+  /**
+   * Calculates the distance between two locations using the Haversine formula.
+   *
+   * @param location1 The first location.
+   * @param location2 The second location.
+   * @return The distance between the two locations in miles.
+   */
+  public static double haversineDistance(Location location1, Location location2) {
+    // Convert latitudes and longitudes from degrees to radians
+    double latitude1 = Math.toRadians(location1.getLatitude());
+    double longitude1 = Math.toRadians(location1.getLongitude());
+    double latitude2 = Math.toRadians(location2.getLatitude());
+    double longitude2 = Math.toRadians(location2.getLongitude());
+
+    // Haversine formula
+    double deltaLatitude = latitude2 - latitude1;
+    double deltaLongitude = longitude2 - longitude1;
+    double a = Math.pow(Math.sin(deltaLatitude / 2), 2)
+            + Math.cos(latitude1) * Math.cos(latitude2)
+            * Math.pow(Math.sin(deltaLongitude / 2), 2);
+    double c = 2 * Math.asin(Math.sqrt(a));
+
+    return EARTH_RADIUS * c;
   }
 
 }

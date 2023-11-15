@@ -17,7 +17,7 @@ public interface ItemManagementService {
 
   String generateBarcode(Item item) throws Exception;
 
-  List<Item> getItemsByUserId(Integer userId);
+  List<Item> getItemsByClientId(Integer clientId);
 
   ItemLocation getItemLocationById(Integer itemId, Integer locationId);
 
@@ -26,4 +26,6 @@ public interface ItemManagementService {
   List<ItemLocation> getItemLocationsByItemId(Integer itemId);
 
   List<ItemLocation> getItemLocationsByLocationId(Integer locationId);
+
+  List<ItemLocation> getItemLocationsWithin50Miles(Integer itemId, Integer locationId);
 }
