@@ -1,5 +1,6 @@
 package com.ims.security;
 
+import com.ims.constants.ClientConstants;
 import com.ims.entity.Client;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -7,10 +8,8 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-
 import java.security.Key;
 import java.util.Date;
-
 import org.springframework.stereotype.Component;
 
 
@@ -27,7 +26,6 @@ public class TokenUtil {
   /**
    * Generating the JWT token.
    * Subject is the client email. Token will expire in an hour. SHA256 encrypted.
-   * TODO: add clientType encoding once DB support is added
    * Return: the token as a String
    */
   public String createToken(Client client) {
@@ -36,19 +34,18 @@ public class TokenUtil {
 
     return Jwts.builder()
             .setSubject(client.getEmail())
+            .claim(ClientConstants.CLIENT_TYPE_CLAIM_KEY, client.getClientType())
             .setIssuedAt(now)
             .setExpiration(expireTime)
             .signWith(signKey, SignatureAlgorithm.HS256)
             .compact();
-    // Add a .claim("clientType", client.getClientType()) above to accommodate client type
   }
 
   /**
-   * Validate the incoming token with signKey and make sure it has not expired.
-   * TODO: this function is NOT responsible for validating clientType. It can be later refactored
-   * to do so. Or additional functions can be added to validate specific clientTypes.
+   * Validate the incoming token with signKey, make sure it has not expired, and the encoded
+   * clientType matches with the expectedType parameter.
    */
-  public boolean validateToken(String token) {
+  public boolean validateToken(String token, String expectedType) {
     try {
       if (token == null || token.isEmpty()) {
         return false;
@@ -57,7 +54,12 @@ public class TokenUtil {
               .setSigningKey(signKey)
               .build()
               .parseClaimsJws(token);
-      return !claims.getBody().getExpiration().before(new Date());
+      if (claims.getBody().getExpiration().before(new Date())) {
+        return false;
+      }
+      String clientType = claims.getBody().get(ClientConstants.CLIENT_TYPE_CLAIM_KEY, String.class);
+
+      return clientType != null && clientType.equals(expectedType);
     } catch (JwtException | IllegalArgumentException e) {
       // TODO: Log exception in the future?
       return false;
@@ -76,14 +78,16 @@ public class TokenUtil {
             .getSubject();
   }
 
-  //  For retrieving clientType field from inside the token
-  //  public String getClientType(String token) {
-  //    Claims claims = Jwts.parserBuilder()
-  //            .setSigningKey(signKey)
-  //            .build()
-  //            .parseClaimsJws(token)
-  //            .getBody();
-  //
-  //    return claims.get("clientType", String.class);
-  //  }
+  /**
+   * For retrieving clientType field from inside the token.
+   */
+  public String getClientType(String token) {
+    Claims claims = Jwts.parserBuilder()
+            .setSigningKey(signKey)
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+
+    return claims.get(ClientConstants.CLIENT_TYPE_CLAIM_KEY, String.class);
+  }
 }

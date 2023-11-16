@@ -26,6 +26,11 @@ public final class ClientConstants {
   // Login related keys
   public static final String LOGIN_BODY_MESSAGE_KEY = "message";
   public static final String LOGIN_BODY_TOKEN_KEY = "token";
+  public static final String CLIENT_TYPE_CLAIM_KEY = "clientType";
+
+  // Client types
+  public static final String RETAIL_CLIENT_TYPE = "retail";
+  public static final String WAREHOUSE_CLIENT_TYPE = "warehouse";
 
   // TESTING stuff
   public static final String TEST_DELETE_SUCCESS = "Accounts generated during testing deleted "

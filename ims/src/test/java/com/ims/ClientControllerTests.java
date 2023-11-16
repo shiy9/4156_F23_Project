@@ -42,7 +42,7 @@ public class ClientControllerTests {
   private TokenUtil tokenUtil;
 
   private void loginRespCheck(MvcResult mvcResult, String expectedMessage,
-                              String expectedEmail) throws IOException {
+                              String expectedEmail, String expectedType) throws IOException {
     // convert resp body to map
     String responseContent = mvcResult.getResponse().getContentAsString();
     ObjectMapper objectMapper = new ObjectMapper();
@@ -59,7 +59,7 @@ public class ClientControllerTests {
 
     // Check token is valid
     String token = responseMap.get(ClientConstants.LOGIN_BODY_TOKEN_KEY);
-    assertTrue(tokenUtil.validateToken(token));
+    assertTrue(tokenUtil.validateToken(token, expectedType));
 
     // Further, check if the email in the token matches the input email
     assertEquals(expectedEmail, tokenUtil.getEmail(token));
@@ -204,7 +204,8 @@ public class ClientControllerTests {
                     .content(clientJSON))
             .andExpect(status().isOk())
             .andReturn();
-    loginRespCheck(mvcResult, ClientConstants.LOGIN_SUCCESS, "json@columbia.edu");
+    loginRespCheck(mvcResult, ClientConstants.LOGIN_SUCCESS, "json@columbia.edu",
+            ClientConstants.RETAIL_CLIENT_TYPE);
   }
 
   @Test
@@ -216,7 +217,8 @@ public class ClientControllerTests {
                     .content(clientJSON))
             .andExpect(status().isOk())
             .andReturn();
-    loginRespCheck(mvcResult, ClientConstants.LOGIN_SUCCESS, "json2@columbia.edu");
+    loginRespCheck(mvcResult, ClientConstants.LOGIN_SUCCESS, "json2@columbia.edu",
+            ClientConstants.WAREHOUSE_CLIENT_TYPE);
   }
 
   @Test
@@ -229,7 +231,8 @@ public class ClientControllerTests {
             .andExpect(status().isOk())
             .andReturn();
 
-    loginRespCheck(mvcResult, ClientConstants.LOGIN_SUCCESS, "json3@columbia.edu");
+    loginRespCheck(mvcResult, ClientConstants.LOGIN_SUCCESS, "json3@columbia.edu",
+            ClientConstants.RETAIL_CLIENT_TYPE);
   }
 
   @Test
@@ -242,7 +245,7 @@ public class ClientControllerTests {
             .andExpect(status().isNotFound())
             .andReturn();
     // expectedEmail does not matter since it will not be checked
-    loginRespCheck(mvcResult, ClientConstants.CLIENT_NOT_FOUND, "");
+    loginRespCheck(mvcResult, ClientConstants.CLIENT_NOT_FOUND, "", "");
   }
 
   @Test
@@ -255,7 +258,7 @@ public class ClientControllerTests {
                     .content(clientJSON))
             .andExpect(status().isUnauthorized())
             .andReturn();
-    loginRespCheck(mvcResult, ClientConstants.PASSWORD_MISMATCH, "");
+    loginRespCheck(mvcResult, ClientConstants.PASSWORD_MISMATCH, "", "");
   }
 
   @Test
@@ -267,7 +270,7 @@ public class ClientControllerTests {
                     .content(clientJSON))
             .andExpect(status().isUnauthorized())
             .andReturn();
-    loginRespCheck(mvcResult, ClientConstants.PASSWORD_MISMATCH, "");
+    loginRespCheck(mvcResult, ClientConstants.PASSWORD_MISMATCH, "", "");
   }
 
   /**
