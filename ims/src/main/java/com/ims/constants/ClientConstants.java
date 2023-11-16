@@ -29,8 +29,12 @@ public final class ClientConstants {
   public static final String CLIENT_TYPE_CLAIM_KEY = "clientType";
 
   // Client types
-  public static final String RETAIL_CLIENT_TYPE = "retail";
-  public static final String WAREHOUSE_CLIENT_TYPE = "warehouse";
+  public static final String CLIENT_TYPE_RETAIL = "retail";
+  public static final String CLIENT_TYPE_WAREHOUSE = "warehouse";
+
+  // Token related
+  public static final String TOKEN_EXPIRED = "Token has expired";
+  public static final String TYPE_NOT_AUTHORIZED = "Cannot use this endpoint.";
 
   // TESTING stuff
   public static final String TEST_DELETE_SUCCESS = "Accounts generated during testing deleted "

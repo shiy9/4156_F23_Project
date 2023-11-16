@@ -205,7 +205,7 @@ public class ClientControllerTests {
             .andExpect(status().isOk())
             .andReturn();
     loginRespCheck(mvcResult, ClientConstants.LOGIN_SUCCESS, "json@columbia.edu",
-            ClientConstants.RETAIL_CLIENT_TYPE);
+            ClientConstants.CLIENT_TYPE_RETAIL);
   }
 
   @Test
@@ -218,7 +218,7 @@ public class ClientControllerTests {
             .andExpect(status().isOk())
             .andReturn();
     loginRespCheck(mvcResult, ClientConstants.LOGIN_SUCCESS, "json2@columbia.edu",
-            ClientConstants.WAREHOUSE_CLIENT_TYPE);
+            ClientConstants.CLIENT_TYPE_WAREHOUSE);
   }
 
   @Test
@@ -232,7 +232,7 @@ public class ClientControllerTests {
             .andReturn();
 
     loginRespCheck(mvcResult, ClientConstants.LOGIN_SUCCESS, "json3@columbia.edu",
-            ClientConstants.RETAIL_CLIENT_TYPE);
+            ClientConstants.CLIENT_TYPE_RETAIL);
   }
 
   @Test
@@ -281,8 +281,7 @@ public class ClientControllerTests {
   @Order(16)
   public void cleanup() throws Exception {
     List<String> createdClients = Arrays.asList("json@columbia.edu", "json2@columbia.edu",
-            "json3" +
-                    "@columbia.edu");
+            "json3@columbia.edu");
     String targets = new ObjectMapper().writeValueAsString(createdClients);
 
     mockMvc.perform(post("/client/clienttestdelete")

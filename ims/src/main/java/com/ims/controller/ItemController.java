@@ -7,11 +7,13 @@ import com.ims.entity.Location;
 import com.ims.service.ItemManagementService;
 import com.ims.service.LocationService;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,11 +33,13 @@ public class ItemController {
 
   /**
    * Endpoint to retrieve location by ID.
+   *
    * @param id The location ID.
    * @return ResponseEntity containing the location object.
    */
   @GetMapping("/location/get/{id}")
-  public ResponseEntity<Location> getLocationById(@PathVariable Integer id) {
+  public ResponseEntity<Location> getLocationById(@PathVariable Integer id,
+                                                  HttpServletRequest request) {
     Location location = locationService.getLocationById(id);
     if (location != null) {
       return ResponseEntity.ok(location);
@@ -46,6 +50,7 @@ public class ItemController {
 
   /**
    * Endpoint create a location.
+   *
    * @param location The location object.
    * @return The response entity containing the result of the operation.
    */
@@ -62,11 +67,18 @@ public class ItemController {
 
   /**
    * Endpoint to retrieve item by ID.
+   *
    * @param id The item ID.
    * @return ResponseEntity containing the item object.
    */
+  @PreAuthorize("@tokenUtil.getClientType(T(com.ims.security.TokenUtil).extractToken(#request))"
+          + ".equals(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE)"
+          + " or "
+          + "@tokenUtil.getClientType(T(com.ims.security.TokenUtil).extractToken(#request))"
+          + ".equals(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @GetMapping("/item/get/{id}")
-  public ResponseEntity<Item> getItemByItemId(@PathVariable Integer id) {
+  public ResponseEntity<Item> getItemByItemId(@PathVariable Integer id,
+                                              HttpServletRequest request) {
     Item item = itemManagementService.getItemByItemId(id);
     if (item != null) {
       return ResponseEntity.ok(item);
@@ -77,6 +89,7 @@ public class ItemController {
 
   /**
    * Endpoint to retrieve a list of items by user ID.
+   *
    * @param userId The user ID.
    * @return ResponseEntity containing a list of items associated with the user ID.
    */
@@ -92,6 +105,7 @@ public class ItemController {
 
   /**
    * Endpoint to create an item.
+   *
    * @param item The item object.
    * @return ResponseEntity containing the result of the operation.
    */
@@ -107,6 +121,7 @@ public class ItemController {
 
   /**
    * Endpoint to update an item.
+   *
    * @param item The item object.
    * @return ResponseEntity containing the result of the operation.
    */
@@ -122,6 +137,7 @@ public class ItemController {
 
   /**
    * Endpoint to generate a barcode for an item.
+   *
    * @param id The item ID.
    * @return ResponseEntity containing the result of the operation.
    */
@@ -146,6 +162,7 @@ public class ItemController {
 
   /**
    * Endpoint to retrieve the barcode image for an item.
+   *
    * @param id The item ID.
    * @return ResponseEntity containing the barcode image in png format.
    */
@@ -170,7 +187,8 @@ public class ItemController {
 
   /**
    * Endpoint to retrieve item location by item ID and location ID.
-   * @param itemId The item ID.
+   *
+   * @param itemId     The item ID.
    * @param locationId The location ID.
    * @return ResponseEntity containing the item location object.
    */
@@ -187,6 +205,7 @@ public class ItemController {
 
   /**
    * Endpoint to retrieve item locations by item ID.
+   *
    * @param itemId The item ID.
    * @return ResponseEntity containing a list of item location objects.
    */
@@ -202,6 +221,7 @@ public class ItemController {
 
   /**
    * Endpoint to retrieve item locations by location ID.
+   *
    * @param locationId The location ID.
    * @return ResponseEntity containing a list of item location objects.
    */
@@ -217,6 +237,7 @@ public class ItemController {
 
   /**
    * Endpoint to create an item location.
+   *
    * @param itemLocation The item location object.
    * @return ResponseEntity containing the result of the operation.
    */

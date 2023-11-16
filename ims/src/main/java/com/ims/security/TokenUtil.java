@@ -10,6 +10,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
 
@@ -44,6 +45,7 @@ public class TokenUtil {
   /**
    * Validate the incoming token with signKey, make sure it has not expired, and the encoded
    * clientType matches with the expectedType parameter.
+   * Used for ease of testing.
    */
   public boolean validateToken(String token, String expectedType) {
     try {
@@ -60,6 +62,26 @@ public class TokenUtil {
       String clientType = claims.getBody().get(ClientConstants.CLIENT_TYPE_CLAIM_KEY, String.class);
 
       return clientType != null && clientType.equals(expectedType);
+    } catch (JwtException | IllegalArgumentException e) {
+      // TODO: Log exception in the future?
+      return false;
+    }
+  }
+
+  /**
+   * Validate the incoming token with signKey, and make sure it has not expired.
+   * Note: the function does not offer clientType check.
+   */
+  public boolean validateToken(String token) {
+    try {
+      if (token == null || token.isEmpty()) {
+        return false;
+      }
+      Jws<Claims> claims = Jwts.parserBuilder()
+              .setSigningKey(signKey)
+              .build()
+              .parseClaimsJws(token);
+      return !claims.getBody().getExpiration().before(new Date());
     } catch (JwtException | IllegalArgumentException e) {
       // TODO: Log exception in the future?
       return false;
@@ -89,5 +111,13 @@ public class TokenUtil {
             .getBody();
 
     return claims.get(ClientConstants.CLIENT_TYPE_CLAIM_KEY, String.class);
+  }
+
+  public String extractToken(HttpServletRequest request) {
+    String bearerToken = request.getHeader("Authorization");
+    if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+      return bearerToken.substring(7);
+    }
+    return null;
   }
 }
