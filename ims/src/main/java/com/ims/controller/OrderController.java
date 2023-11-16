@@ -61,20 +61,20 @@ public class OrderController {
    * @return ResponseEntity containing a list of orders associated with the client ID.
    */
   @GetMapping("/retrieve/client/{clientId}")
-  public ResponseEntity<String> retrieveOrdersByClientId(@PathVariable Integer clientId) {
+  public ResponseEntity<?> retrieveOrdersByClientId(@PathVariable Integer clientId) {
     List<Order> orders = OrderService.retrieveOrdersByClientId(clientId);
     if (!orders.isEmpty()) {
-      return ResponseEntity.ok(orders.toString());
+      return ResponseEntity.ok(orders);
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(OrderMessages.ORDER_RETRIEVE_FAILURE_CLIENT);
     }
   }
 
   @GetMapping("/retrieve/order/{orderId}")
-  public ResponseEntity<String> retrieveOrdersById(@PathVariable Integer orderId) {
+  public ResponseEntity<?> retrieveOrdersById(@PathVariable Integer orderId) {
     List<Order> orders = OrderService.retrieveOrdersById(orderId);
     if (!orders.isEmpty()) {
-      return ResponseEntity.ok(orders.toString());
+      return ResponseEntity.ok(orders);
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(OrderMessages.ORDER_RETRIEVE_FAILURE);
     }
@@ -100,7 +100,7 @@ public class OrderController {
   }
 
   @GetMapping("/detail/retrieve/order_id/{orderId}")
-  public ResponseEntity<List<OrderDetail>> retrieveOrderDetailByOrderId(@PathVariable Integer orderId) {
+  public ResponseEntity<?> retrieveOrderDetailByOrderId(@PathVariable Integer orderId) {
     List<OrderDetail> orderDetails = OrderService.retrieveOrderDetailByOrderId(orderId);
     if (!orderDetails.isEmpty()) {
       return ResponseEntity.ok(orderDetails);
@@ -110,7 +110,7 @@ public class OrderController {
   }
 
   @GetMapping("/detail/retrieve/item_id/{itemId}")
-  public ResponseEntity<List<OrderDetail>> retrieveOrderDetailByItemId(@PathVariable Integer itemId) {
+  public ResponseEntity<?> retrieveOrderDetailByItemId(@PathVariable Integer itemId) {
     List<OrderDetail> orderDetails = OrderService.retrieveOrderDetailByItemId(itemId);
     if (!orderDetails.isEmpty()) {
       return ResponseEntity.ok(orderDetails);
