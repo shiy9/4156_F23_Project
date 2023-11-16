@@ -7,6 +7,7 @@ import lombok.Setter;
 /**
  * The Client entity. This class will reflect the Client entity stored in the database.
  */
+
 @Data
 public class Client {
   @Getter
@@ -16,4 +17,8 @@ public class Client {
   @Getter
   @Setter
   private String password;
+
+  @Getter
+  @Setter
+  private String clientType;
 }

@@ -3,6 +3,7 @@ package com.ims.service.impl;
 import com.ims.entity.Client;
 import com.ims.mapper.ClientMapper;
 import com.ims.service.ClientService;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,19 @@ public class ClientServiceImpl implements ClientService {
     Pattern pattern = Pattern.compile(PASSWORD_REGEX);
     Matcher matcher = pattern.matcher(password);
     return matcher.matches();
+  }
+
+  @Override
+  public String validateType(String clientType) {
+    if (clientType == null) {
+      return null;
+    }
+    // Locale-independent version
+    String lowered = clientType.toLowerCase(Locale.ENGLISH);
+    if (lowered.equals("retail") || lowered.equals("warehouse")) {
+      return lowered;
+    }
+    return null;
   }
 
   @Override

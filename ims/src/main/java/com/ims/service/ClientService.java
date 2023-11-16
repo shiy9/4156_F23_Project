@@ -26,6 +26,13 @@ public interface ClientService {
   boolean isValidPassword(String password);
 
   /**
+   * Validates if the provided clientType is either "retail" or "warehouse". After turning the
+   * clientType param to all lowercase, if it matches either one, return the string. Otherwise,
+   * return null indicating not valid.
+   */
+  String validateType(String clientType);
+
+  /**
    * Check if the client exists in the database. Used by the register process
    * Uses ClientMapper's emailExists() method.
    */

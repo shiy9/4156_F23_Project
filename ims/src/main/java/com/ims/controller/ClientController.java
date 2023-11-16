@@ -46,6 +46,11 @@ public class ClientController {
     if (!clientService.isValidPassword(clientPassword)) {
       return new ResponseEntity<>(ClientConstants.INVALID_PASSWORD, HttpStatus.BAD_REQUEST);
     }
+    String clientType = clientService.validateType(client.getClientType());
+    if (clientType == null) {
+      return new ResponseEntity<>(ClientConstants.INVALID_CLIENT_TYPE, HttpStatus.BAD_REQUEST);
+    }
+    client.setClientType(clientType);
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     String encryptedPass = encoder.encode(clientPassword);

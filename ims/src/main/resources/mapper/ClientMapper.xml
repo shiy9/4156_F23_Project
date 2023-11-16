@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<!-- TODO: change the "Users" below to "Client" in DB -->
 <mapper namespace="com.ims.mapper.ClientMapper">
     <select id="emailExists" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM Users
+        FROM Clients
         WHERE email = #{email}
     </select>
 
     <insert id="insert">
-        INSERT INTO Users (email, password)
-        VALUES (#{email}, #{password})
+        INSERT INTO Clients (email, password, client_type)
+        VALUES (#{email}, #{password}, #{clientType})
     </insert>
 
     <select id="getClient" resultType="com.ims.entity.Client">
-        SELECT email, password
-        FROM Users
+        SELECT email, password, client_type AS clientType
+        FROM Clients
         WHERE email = #{email}
     </select>
-    
+
     <delete id="testDeleteByEmail">
         DELETE
-        FROM Users
+        FROM Clients
         WHERE email = #{email}
     </delete>
 

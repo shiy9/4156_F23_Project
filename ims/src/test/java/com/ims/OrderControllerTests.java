@@ -53,17 +53,17 @@ public class OrderControllerTests {
             .contentType("application/json")
             .content(orderJson))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().string(OrderMessages.CREATE_SUCCESS));
+            .andExpect(MockMvcResultMatchers.content().string(OrderMessages.ORDER_CREATE_SUCCESS));
   }
 
   @Test
   public void retrieveOrdersByUserIdTest() throws Exception {
     Order mockOrder = new Order();
     mockOrder.setOrderId(1);
-    mockOrder.setUserId(1);
+    mockOrder.setClientId(1);
     mockOrder.setOrderStatus("PENDING");
     List<Order> mockOrders = Collections.singletonList(mockOrder);
-    when(orderService.retrieveOrdersByUserId(1)).thenReturn(mockOrders);
+    when(orderService.retrieveOrdersByClientId(1)).thenReturn(mockOrders);
 
     mockMvc.perform(MockMvcRequestBuilders.get("/order/retrieve/user/1")
             .contentType("application/json"))
@@ -83,7 +83,7 @@ public class OrderControllerTests {
             .contentType("application/json")
             .content(updatedOrderJson))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().string(OrderMessages.UPDATE_SUCCESS));
+            .andExpect(MockMvcResultMatchers.content().string(OrderMessages.ORDER_UPDATE_SUCCESS));
   }
 
   @Test
@@ -92,6 +92,6 @@ public class OrderControllerTests {
 
     mockMvc.perform(MockMvcRequestBuilders.delete("/order/delete/1"))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().string(OrderMessages.DELETE_SUCCESS));
+            .andExpect(MockMvcResultMatchers.content().string(OrderMessages.ORDER_DELETE_SUCCESS));
   }
 }

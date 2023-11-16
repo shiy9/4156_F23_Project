@@ -72,7 +72,8 @@ public class ClientControllerTests {
   @Test
   @Order(1)
   public void successRegTest() throws Exception {
-    String clientJSON = "{ \"email\": \"json@columbia.edu\", \"password\": \"Test1234\" }";
+    String clientJSON = "{ \"email\": \"json@columbia.edu\", \"password\": \"Test1234\", " +
+            "\"clientType\": \"reTail\" }";
     mockMvc.perform(post("/client/register")
                     .contentType("application/json")
                     .content(clientJSON))
@@ -84,7 +85,8 @@ public class ClientControllerTests {
   @Order(2)
   public void dupEmailRegTest() throws Exception {
     // password is also invalid, but should return client exists as that is more important
-    String clientJSON = "{ \"email\": \"json@columbia.edu\", \"password\": \"imduplicate\" }";
+    String clientJSON = "{ \"email\": \"json@columbia.edu\", \"password\": \"imduplicate\", " +
+            "\"clientType\": \"retail\" }";
     mockMvc.perform(post("/client/register")
                     .contentType("application/json")
                     .content(clientJSON))
@@ -96,7 +98,8 @@ public class ClientControllerTests {
   @Order(3)
   public void badPassRegTest1() throws Exception {
     // password too short
-    String clientJSON = "{ \"email\": \"json2@columbia.edu\", \"password\": \"2short\" }";
+    String clientJSON = "{ \"email\": \"json2@columbia.edu\", \"password\": \"2short\", " +
+            "\"clientType\": \"retail\" }";
     mockMvc.perform(post("/client/register")
                     .contentType("application/json")
                     .content(clientJSON))
@@ -107,7 +110,8 @@ public class ClientControllerTests {
   @Order(4)
   public void badPassRegTest2() throws Exception {
     // password has no letter
-    String clientJSON = "{ \"email\": \"json2@columbia.edu\", \"password\": \"12345678\" }";
+    String clientJSON = "{ \"email\": \"json2@columbia.edu\", \"password\": \"12345678\", " +
+            "\"clientType\": \"retail\" }";
     mockMvc.perform(post("/client/register")
                     .contentType("application/json")
                     .content(clientJSON))
@@ -119,8 +123,8 @@ public class ClientControllerTests {
   public void badPassRegTest3() throws Exception {
     // password has no number
     String clientJSON = "{ \"email\": \"json2@columbia.edu\", \"password\": " +
-            "\"nonumberwhatsoever\"" +
-            " }";
+            "\"nonumberwhatsoever\", " +
+            "\"clientType\": \"retail\" }";
     mockMvc.perform(post("/client/register")
                     .contentType("application/json")
                     .content(clientJSON))
@@ -131,7 +135,8 @@ public class ClientControllerTests {
   @Order(6)
   public void badEmailRegTest1() throws Exception {
     // invalid email format missing @ and .something
-    String clientJSON = "{ \"email\": \"imNotAnEmail\", \"password\": \"Test1234\" }";
+    String clientJSON = "{ \"email\": \"imNotAnEmail\", \"password\": \"Test1234\", " +
+            "\"clientType\": \"retail\" }";
     mockMvc.perform(post("/client/register")
                     .contentType("application/json")
                     .content(clientJSON))
@@ -142,7 +147,8 @@ public class ClientControllerTests {
   @Order(7)
   public void badEmailRegTest2() throws Exception {
     // invalid email format -> missing .something
-    String clientJSON = "{ \"email\": \"notAnEmail@either\", \"password\": \"Test1234\" }";
+    String clientJSON = "{ \"email\": \"notAnEmail@either\", \"password\": \"Test1234\", " +
+            "\"clientType\": \"retail\" }";
     mockMvc.perform(post("/client/register")
                     .contentType("application/json")
                     .content(clientJSON))
@@ -150,9 +156,22 @@ public class ClientControllerTests {
   }
 
   @Test
+  @Order(7)
+  public void badTypeRegTest() throws Exception {
+    // invalid clientType
+    String clientJSON = "{ \"email\": \"json2@columbia.edu\", \"password\": \"Test1234\", " +
+            "\"clientType\": \"sometype\" }";
+    mockMvc.perform(post("/client/register")
+                    .contentType("application/json")
+                    .content(clientJSON))
+            .andExpect(content().string(ClientConstants.INVALID_CLIENT_TYPE));
+  }
+
+  @Test
   @Order(8)
   public void successRegTest2() throws Exception {
-    String clientJSON = "{ \"email\": \"json2@columbia.edu\", \"password\": \"Test2345\" }";
+    String clientJSON = "{ \"email\": \"json2@columbia.edu\", \"password\": \"Test2345\", " +
+            "\"clientType\": \"wAreHouse\" }";
     mockMvc.perform(post("/client/register")
                     .contentType("application/json")
                     .content(clientJSON))
@@ -163,7 +182,8 @@ public class ClientControllerTests {
   @Test
   @Order(9)
   public void successRegTest3() throws Exception {
-    String clientJSON = "{ \"email\": \"json3@columbia.edu\", \"password\": \"Test3456\" }";
+    String clientJSON = "{ \"email\": \"json3@columbia.edu\", \"password\": \"Test3456\", " +
+            "\"clientType\": \"retail\" }";
     mockMvc.perform(post("/client/register")
                     .contentType("application/json")
                     .content(clientJSON))

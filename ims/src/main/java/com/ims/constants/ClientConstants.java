@@ -5,7 +5,8 @@ package com.ims.constants;
  * The class should not be "instantiable", hence the private constructor.
  */
 public final class ClientConstants {
-  private ClientConstants() {} // prevent instantiation
+  private ClientConstants() {
+  } // prevent instantiation
 
   // Register related messages
   public static final String INVALID_EMAIL = "Invalid email format";
@@ -14,6 +15,8 @@ public final class ClientConstants {
   public static final String CLIENT_EXISTS = "Client already exists";
   public static final String CLIENT_INSERT_FAILED = "Insert failed"; // db rejects the insert
   public static final String CLIENT_REGISTER_SUCCESS = "Register Success";
+  public static final String INVALID_CLIENT_TYPE = "Invalid client type. Must be \"retail\" or "
+          + "\"warehouse\"";
 
   // Login related messages
   public static final String CLIENT_NOT_FOUND = "Client not found";
