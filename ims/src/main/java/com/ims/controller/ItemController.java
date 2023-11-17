@@ -71,11 +71,8 @@ public class ItemController {
    * @param id The item ID.
    * @return ResponseEntity containing the item object.
    */
-  @PreAuthorize("@tokenUtil.getClientType(T(com.ims.security.TokenUtil).extractToken(#request))"
-          + ".equals(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE)"
-          + " or "
-          + "@tokenUtil.getClientType(T(com.ims.security.TokenUtil).extractToken(#request))"
-          + ".equals(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @GetMapping("/item/get/{id}")
   public ResponseEntity<Item> getItemByItemId(@PathVariable Integer id,
                                               HttpServletRequest request) {

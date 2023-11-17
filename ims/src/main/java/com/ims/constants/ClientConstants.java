@@ -33,8 +33,8 @@ public final class ClientConstants {
   public static final String CLIENT_TYPE_WAREHOUSE = "warehouse";
 
   // Token related
-  public static final String TOKEN_EXPIRED = "Token has expired";
-  public static final String TYPE_NOT_AUTHORIZED = "Cannot use this endpoint.";
+  public static final String INVALID_TOKEN = "Expired or invalid token.";
+  public static final String TYPE_NOT_AUTHORIZED = "Not authorized to use this endpoint.";
 
   // TESTING stuff
   public static final String TEST_DELETE_SUCCESS = "Accounts generated during testing deleted "

@@ -14,7 +14,7 @@
     </resultMap>
 
     <select id="getItemByItemId" resultMap="itemMap">
-        SELECT item_id, user_id, name, current_stock_level, description, price, barcode
+        SELECT item_id, client_id, name, current_stock_level, description, price, barcode
         FROM Items
         WHERE item_id = #{itemId}
     </select>
@@ -22,11 +22,12 @@
     <select id="getItemsByUserId" resultMap="itemMap">
         SELECT *
         FROM Items
-        WHERE user_id = #{userId}
+        WHERE client_id = #{userId}
     </select>
 
     <insert id="insert" parameterType="Item" useGeneratedKeys="true" keyProperty="itemId" keyColumn="item_id">
-        INSERT INTO Items (item_id, user_id, name, current_stock_level, description, price, barcode)
+        INSERT INTO Items (item_id, client_id, name, current_stock_level, description, price,
+                           barcode)
         VALUES (#{itemId}, #{userId}, #{name}, #{currentStockLevel}, #{description}, #{price}, #{barcode})
     </insert>
 
