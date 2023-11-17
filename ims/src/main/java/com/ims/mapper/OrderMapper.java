@@ -16,7 +16,7 @@ public interface OrderMapper {
 
   int delete(Integer orderId);
 
-  List<Order> retrieveOrdersByUserId(Integer userId);
+  List<Order> retrieveOrdersByClientId(Integer clientId);
 
-  List<Order> retrieveOrdersByItemId(Integer itemId);
+  List<Order> retrieveOrdersById(Integer orderId);
 }
