@@ -4,14 +4,14 @@ import com.ims.constants.OrderMessages;
 import com.ims.entity.Order;
 import com.ims.entity.OrderDetail;
 import com.ims.service.OrderService;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,27 +28,35 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
   @Autowired
-  private OrderService OrderService;
+  private OrderService orderService;
 
   //Order related
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @PostMapping("/create")
   public ResponseEntity<String> createOrder(@RequestBody Order order) {
-    OrderService.createOrder(order);
+    orderService.createOrder(order);
     return ResponseEntity.ok(OrderMessages.ORDER_CREATE_SUCCESS);
   }
 
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @PutMapping("/update")
   public ResponseEntity<String> updateOrder(@RequestBody Order order) {
-    OrderService.updateOrder(order);
+    orderService.updateOrder(order);
     return ResponseEntity.ok(OrderMessages.ORDER_UPDATE_SUCCESS);
   }
 
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @DeleteMapping("/delete/{orderId}")
   public ResponseEntity<String> deleteOrder(@PathVariable Integer orderId) {
-    OrderService.deleteOrder(orderId);
+    orderService.deleteOrder(orderId);
     return ResponseEntity.ok(OrderMessages.ORDER_DELETE_SUCCESS);
   }
 
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @ExceptionHandler(NoSuchElementException.class)
   public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(OrderMessages.ORDER_INVALID_ID);
@@ -60,19 +68,24 @@ public class OrderController {
    * @param clientId The client's ID.
    * @return ResponseEntity containing a list of orders associated with the client ID.
    */
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @GetMapping("/retrieve/client/{clientId}")
   public ResponseEntity<?> retrieveOrdersByClientId(@PathVariable Integer clientId) {
-    List<Order> orders = OrderService.retrieveOrdersByClientId(clientId);
+    List<Order> orders = orderService.retrieveOrdersByClientId(clientId);
     if (!orders.isEmpty()) {
       return ResponseEntity.ok(orders);
     } else {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(OrderMessages.ORDER_RETRIEVE_FAILURE_CLIENT);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+              .body(OrderMessages.ORDER_RETRIEVE_FAILURE_CLIENT);
     }
   }
 
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @GetMapping("/retrieve/order/{orderId}")
   public ResponseEntity<?> retrieveOrdersById(@PathVariable Integer orderId) {
-    List<Order> orders = OrderService.retrieveOrdersById(orderId);
+    List<Order> orders = orderService.retrieveOrdersById(orderId);
     if (!orders.isEmpty()) {
       return ResponseEntity.ok(orders);
     } else {
@@ -81,27 +94,35 @@ public class OrderController {
   }
 
   //OrderDetail related
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @PostMapping("/detail/create")
   public ResponseEntity<String> createOrderDetail(@RequestBody OrderDetail orderDetail) {
-    OrderService.createOrderDetail(orderDetail);
+    orderService.createOrderDetail(orderDetail);
     return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_CREATE_SUCCESS);
   }
 
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @PutMapping("/detail/update")
   public ResponseEntity<String> updateOrderDetail(@RequestBody OrderDetail orderDetail) {
-    OrderService.updateOrderDetail(orderDetail);
+    orderService.updateOrderDetail(orderDetail);
     return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_UPDATE_SUCCESS);
   }
 
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @DeleteMapping("/detail/delete/{orderId}")
   public ResponseEntity<String> deleteOrderDetail(@PathVariable Integer orderId) {
-    OrderService.deleteOrderDetail(orderId);
+    orderService.deleteOrderDetail(orderId);
     return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_DELETE_SUCCESS);
   }
 
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @GetMapping("/detail/retrieve/order_id/{orderId}")
   public ResponseEntity<?> retrieveOrderDetailByOrderId(@PathVariable Integer orderId) {
-    List<OrderDetail> orderDetails = OrderService.retrieveOrderDetailByOrderId(orderId);
+    List<OrderDetail> orderDetails = orderService.retrieveOrderDetailByOrderId(orderId);
     if (!orderDetails.isEmpty()) {
       return ResponseEntity.ok(orderDetails);
     } else {
@@ -109,9 +130,11 @@ public class OrderController {
     }
   }
 
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @GetMapping("/detail/retrieve/item_id/{itemId}")
   public ResponseEntity<?> retrieveOrderDetailByItemId(@PathVariable Integer itemId) {
-    List<OrderDetail> orderDetails = OrderService.retrieveOrderDetailByItemId(itemId);
+    List<OrderDetail> orderDetails = orderService.retrieveOrderDetailByItemId(itemId);
     if (!orderDetails.isEmpty()) {
       return ResponseEntity.ok(orderDetails);
     } else {

@@ -56,6 +56,28 @@ corner of the IDE, which will start running the server at `http://localhost:8001
 &nbsp;
 <br>
 
+### Side note: how to use token and expected token behavior
+- Client-related endpoints do NOT require a token, since they are responsible for registration 
+  and generating the token.
+- For all Order-related and Item-related requests, the token acquired from `/client/login` will need
+  to be included in the header as a Bearer token (i.e. in the `Authorization` header field, the 
+  value needs to be `Bearer <token>`). Note that the `Bearer` and space is necessary, else the 
+  request will fail.
+  - In Postman, you can click on the "Authorization" tab, select the type to be "Bearer Token", 
+    and copy the token into the box.
+- Tokens generated at login are valid for 1 hour. If no token is provided when needed, or the 
+  token has expired, the request will fail with a `401` unauthorized code with a message saying 
+  "Expired or invalid token.".
+- Additionally, different `clientType`s may or may not have access to certain endpoints. If a 
+  `retail` type client tries to interact with an endpoint only meant for `warehouse` type client,
+  a `401` unauthorized code will also be thrown with a message saying "Not authorized to use 
+  this endpoint.". More implementation details [here](#details-of-token-related-implementation).
+
+
+&nbsp;
+<br>
+
+
 ### Order-related
 #### **Create an Order**
 `/order/create`
@@ -180,6 +202,47 @@ adding the quantityAtLocation to the current_stock_level.
   - `200`: List of ItemLocations
   - `404`: Not Found
 
+## Details of Token-related Implementation
+- All classes to support authentication at every endpoint using JWT token are in 
+  `ims/src/main/java/com/ims/security/`.
+- `TokenUtil` class is a utility class for the token. It is responsible for generating and 
+  validating token, extracting client type encoded into the token as well as several other 
+  functions. See the code for more details.
+- We are using Spring Security to support authentication at every endpoint. Since the token is 
+  custom to our service, we need to configure the spring security to meet our needs.
+  - `SecurityConfiguration` class does just the configuration. It allows the client-related 
+    endpoints to go without needing authentication and run `TokenFilter` on the endpoints that 
+    require authentication.
+  - All request will first go through `TokenFilter`. After verifying the endpoint is indeed 
+    supported, it will verify that the request carries a valid token. `clientType` check does 
+    NOT happen at this step as it is endpoint-specific. It does encode an "Authority" based 
+    on the `clientType`, which will be used to check if the `clientType` is valid for certain 
+    requests. More on this below.
+- All endpoints will now have a `@PreAuthorize` in front. For example,
+  - If both `retail` and `warehouse` `clientType`s can access the endpoint (note that these two 
+    types are coded as constants in `com.ims.constants.ClientConstants`), 
+    ```java
+    @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+      + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
+    ```
+  - If only `warehouse` `clientType` can access the endpoint,
+    ```java
+    @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE)")
+    ```
+  - Similarly, if only `retail` `clientType` can access the endpoint,
+    ```java
+    @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
+    ```
+- If `clientType` mismatch occurred because `@PreAuthorize` failed, an `AccessDeniedException` 
+  will be thrown and caught by `ims/src/main/java/com/ims/exception/GlobalExceptionHandler`. A 
+  `401` unauthorized will be returned along with a message saying "Not authorized to use this 
+  endpoint."
+
+
+&nbsp;
+<br>
+
+
 ## Style Checker
 - We are using the CheckStyle plugin on IntelliJ to check for potential style warning/errors.
 
@@ -191,3 +254,6 @@ adding the quantityAtLocation to the current_stock_level.
 - For [password regex](https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a)
 - For [email regex](https://regexr.com/3e48o)
 - For password encoder (BCrypt): [link1](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/crypto/bcrypt/BCrypt.html), [link2](https://www.educative.io/answers/how-does-the-bcrypt-encoding-scheme-work-in-spring-security)
+### Resources used for Spring Security
+- https://spring.io/projects/spring-security#learn
+- https://www.codejava.net/frameworks/spring-boot/spring-security-jwt-authentication-tutorial 

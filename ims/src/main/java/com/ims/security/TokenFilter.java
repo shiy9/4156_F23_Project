@@ -58,8 +58,6 @@ public class TokenFilter extends OncePerRequestFilter {
     if (token != null && token.startsWith("Bearer ")) {
       token = token.substring(7);
       valid = tokenUtil.validateToken(token);
-      String type = tokenUtil.getClientType(token);
-      System.out.print(type);
     }
 
     if (!valid) {
@@ -68,6 +66,7 @@ public class TokenFilter extends OncePerRequestFilter {
       response.getWriter().write(ClientConstants.INVALID_TOKEN);
       response.getWriter().flush();
     } else {
+      // Set client type as authority
       String clientType = tokenUtil.getClientType(token);
       UsernamePasswordAuthenticationToken authentication =
               new UsernamePasswordAuthenticationToken(null, null,
