@@ -38,8 +38,7 @@ public class ItemController {
    * @return ResponseEntity containing the location object.
    */
   @GetMapping("/location/get/{id}")
-  public ResponseEntity<Location> getLocationById(@PathVariable Integer id,
-                                                  HttpServletRequest request) {
+  public ResponseEntity<Location> getLocationById(@PathVariable Integer id) {
     Location location = locationService.getLocationById(id);
     if (location != null) {
       return ResponseEntity.ok(location);
@@ -90,9 +89,9 @@ public class ItemController {
    * @param userId The user ID.
    * @return ResponseEntity containing a list of items associated with the user ID.
    */
-  @GetMapping("/item/getByUserId/{userId}")
-  public ResponseEntity<List<Item>> getItemsByUserId(@PathVariable Integer userId) {
-    List<Item> items = itemManagementService.getItemsByUserId(userId);
+  @GetMapping("/item/getByClientId/{clientId}")
+  public ResponseEntity<List<Item>> getItemsByClientId(@PathVariable Integer clientId) {
+    List<Item> items = itemManagementService.getItemsByClientId(clientId);
     if (items != null) {
       return ResponseEntity.ok(items);
     } else {
@@ -229,6 +228,23 @@ public class ItemController {
       return ResponseEntity.ok(itemLocations);
     } else {
       return ResponseEntity.notFound().build();
+    }
+  }
+
+  /**
+   * Endpoint to retrieve item locations within 50 miles of a location.
+   * @param itemId The item ID.
+   * @param locationId The location ID.
+   * @return ResponseEntity containing a list of item location objects.
+   */
+  @GetMapping("/itemLocation/getWithin50Miles/{itemId}/{locationId}")
+  public ResponseEntity<List<ItemLocation>> getItemLocationsWithin50Miles(@PathVariable Integer itemId,
+                                                                          @PathVariable Integer locationId) {
+    List<ItemLocation> itemLocations = itemManagementService.getItemLocationsWithin50Miles(itemId, locationId);
+    if (itemLocations != null) {
+      return ResponseEntity.ok(itemLocations);
+    } else {
+        return ResponseEntity.notFound().build();
     }
   }
 

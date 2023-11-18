@@ -9,18 +9,21 @@
         <result property="name" column="name"/>
         <result property="address1" column="address_1"/>
         <result property="address2" column="address_2"/>
-        <result property="userId" column="user_id"/>
+        <result property="clientId" column="client_id"/>
+        <result property="zipCode" column="zip_code"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
     </resultMap>
 
     <select id="getLocationById" resultMap="locationMap">
-        SELECT location_id, name, address_1, address_2, user_id
+        SELECT location_id, name, address_1, address_2, client_id, zip_code, latitude, longitude
         FROM Locations
         WHERE location_id = #{locationId}
     </select>
 
     <insert id="insert" parameterType="Location" useGeneratedKeys="true" keyProperty="locationId" keyColumn="location_id">
-        INSERT INTO Locations (location_id, name, address_1, address_2, user_id)
-        VALUES (#{locationId}, #{name}, #{address1}, #{address2}, #{userId})
+        INSERT INTO Locations (location_id, name, address_1, address_2, client_id, zip_code, latitude, longitude)
+        VALUES (#{locationId}, #{name}, #{address1}, #{address2}, #{clientId}, #{zipCode}, #{latitude}, #{longitude})
     </insert>
 
 </mapper>

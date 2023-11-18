@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Item {
   private Integer itemId;
-  private Integer userId;
+  private Integer clientId;
   private String name;
   private Integer currentStockLevel;
   private String description;

@@ -5,7 +5,7 @@
 <mapper namespace="com.ims.mapper.ItemMapper">
     <resultMap id="itemMap" type="Item">
         <id property="itemId" column="item_id"/>
-        <result property="userId" column="user_id"/>
+        <result property="clientId" column="client_id"/>
         <result property="name" column="name"/>
         <result property="currentStockLevel" column="current_stock_level"/>
         <result property="description" column="description"/>
@@ -19,16 +19,15 @@
         WHERE item_id = #{itemId}
     </select>
 
-    <select id="getItemsByUserId" resultMap="itemMap">
+    <select id="getItemsByClientId" resultMap="itemMap">
         SELECT *
         FROM Items
-        WHERE client_id = #{userId}
+        WHERE client_id = #{clientId}
     </select>
 
     <insert id="insert" parameterType="Item" useGeneratedKeys="true" keyProperty="itemId" keyColumn="item_id">
-        INSERT INTO Items (item_id, client_id, name, current_stock_level, description, price,
-                           barcode)
-        VALUES (#{itemId}, #{userId}, #{name}, #{currentStockLevel}, #{description}, #{price}, #{barcode})
+        INSERT INTO Items (item_id, client_id, name, current_stock_level, description, price, barcode)
+        VALUES (#{itemId}, #{clientId}, #{name}, #{currentStockLevel}, #{description}, #{price}, #{barcode})
     </insert>
 
     <update id="update" parameterType="Item">
