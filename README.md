@@ -108,6 +108,22 @@ corner of the IDE, which will start running the server at `http://localhost:8001
   - - `200`: List of orders associated with the provided user ID
     - `404`: No orders found for the provided user ID
 
+#### **Return Alert**
+`/order/returnAlert`
+- **Method**: GET
+- **Request Body**:  None
+- **Expected Response**:
+  - - `200`: List of items about to expire
+    - `404`: No items found that are about to expire
+
+#### **Expiration Alert**
+`/order/expirationAlert`
+- **Method**: GET
+- **Request Body**:  None
+- **Expected Response**:
+  - - `200`: List of expired rental items 
+    - `404`: No expired rental items found 
+
 &nbsp;
 <br>
 
@@ -167,6 +183,15 @@ corner of the IDE, which will start running the server at `http://localhost:8001
 - **Expected Response**:
   - `200`: The barcode in PNG format
   - `404`: Not Found
+
+`/item/reorderAlert`
+- **Method**: GET
+- **Request Body**:  None
+- **Expected Response**:
+  - `200`: Reorder item list
+  - `404`: Not Found
+
+
 
 
 `/itemLocation/create`
