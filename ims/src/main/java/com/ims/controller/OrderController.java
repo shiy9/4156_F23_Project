@@ -141,4 +141,28 @@ public class OrderController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
   }
+
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
+  @GetMapping("/returnAlert")
+  public ResponseEntity<?> returnAlert() {
+    List<OrderDetail> orderDetails = orderService.getReturnAlertItem();
+    if (!orderDetails.isEmpty()) {
+      return ResponseEntity.ok(orderDetails);
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+  }
+
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
+  @GetMapping("/expirationAlert")
+  public ResponseEntity<?> expirationAlert() {
+    List<OrderDetail> orderDetails = orderService.getExpirationAlertItem();
+    if (!orderDetails.isEmpty()) {
+      return ResponseEntity.ok(orderDetails);
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+  }
 }

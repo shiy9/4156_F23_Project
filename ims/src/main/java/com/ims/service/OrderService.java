@@ -22,4 +22,8 @@ public interface OrderService {
   void deleteOrderDetail(Integer orderId);
   List<OrderDetail> retrieveOrderDetailByOrderId(Integer orderId);
   List<OrderDetail> retrieveOrderDetailByItemId(Integer itemId);
+
+  List<OrderDetail> getReturnAlertItem();
+  List<OrderDetail> getExpirationAlertItem();
+
 }

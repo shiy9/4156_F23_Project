@@ -18,4 +18,9 @@ public interface OrderDetailMapper {
     List<OrderDetail> retrieveOrderDetailByOrderId(Integer orderId);
 
     List<OrderDetail> retrieveOrderDetailByItemId(Integer itemId);
+
+    List<OrderDetail> getReturnAlertItem();
+
+    List<OrderDetail> getExpirationAlertItem();
+
 }

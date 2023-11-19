@@ -36,4 +36,10 @@
         WHERE item_id = #{itemId}
     </update>
 
+    <select id="getReorderItem" resultMap="itemMap">
+        SELECT *
+        FROM Items
+        WHERE current_stock_level &lt;= 5
+    </select>
+
 </mapper>

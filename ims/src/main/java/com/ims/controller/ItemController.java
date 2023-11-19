@@ -292,4 +292,21 @@ public class ItemController {
       return ResponseEntity.badRequest().body(result);
     }
   }
+
+  /**
+   * Endpoint to show reorder alert.
+   * @return ResponseEntity containing the result of the operation.
+   */
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
+  @GetMapping("/item/reorderAlert")
+  public ResponseEntity<List<Item>> reorderAlert() {
+    List<Item> items = itemManagementService.getReorderItem();
+    if (!items.isEmpty()) {
+      return ResponseEntity.ok(items);
+    } else {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
 }

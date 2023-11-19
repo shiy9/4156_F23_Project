@@ -69,4 +69,14 @@ public class OrderManagementServiceImpl implements OrderService {
   public List<OrderDetail> retrieveOrderDetailByItemId(Integer itemId) {
     return orderDetailMapper.retrieveOrderDetailByItemId(itemId);
   }
+
+  @Override
+  public List<OrderDetail> getReturnAlertItem() {
+    return orderDetailMapper.getReturnAlertItem();
+  }
+
+  @Override
+  public List<OrderDetail> getExpirationAlertItem() {
+    return orderDetailMapper.getReturnAlertItem();
+  }
 }

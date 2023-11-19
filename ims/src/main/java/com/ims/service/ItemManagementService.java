@@ -28,4 +28,6 @@ public interface ItemManagementService {
   List<ItemLocation> getItemLocationsByLocationId(Integer locationId);
 
   List<ItemLocation> getItemLocationsWithin50Miles(Integer itemId, Integer locationId);
+
+  List<Item> getReorderItem();
 }

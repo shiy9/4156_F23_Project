@@ -38,4 +38,16 @@
     <delete id="delete">
         DELETE FROM OrderDetail WHERE order_id = #{orderId}
     </delete>
+
+    <select id="getReturnAlertItem" resultMap="orderDetailMap">
+        SELECT *
+        FROM OrderDetail
+        WHERE due_date &gt;= CURRENT_DATE AND due_date &lt;= DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY);
+    </select>
+
+    <select id="getExpirationAlertItem" resultMap="orderDetailMap">
+        SELECT *
+        FROM OrderDetail
+        WHERE due_date &lt; CURRENT_DATE;
+    </select>
 </mapper>

@@ -14,4 +14,6 @@ public interface ItemMapper {
   int insert(Item item);
 
   int update(Item item);
+
+  List<Item> getReorderItem();
 }

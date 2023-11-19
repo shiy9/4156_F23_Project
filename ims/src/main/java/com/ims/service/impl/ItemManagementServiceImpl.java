@@ -174,4 +174,9 @@ public class ItemManagementServiceImpl implements ItemManagementService {
     return EARTH_RADIUS * c;
   }
 
+  @Override
+  public List<Item> getReorderItem(){
+    return itemMapper.getReorderItem();
+  }
+
 }
