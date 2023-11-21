@@ -40,7 +40,8 @@ public class TokenUtil {
 
     return Jwts.builder()
             .setSubject(client.getEmail())
-            .claim(ClientConstants.CLIENT_TYPE_CLAIM_KEY, client.getClientType())
+            .claim(ClientConstants.CLAIM_KEY_CLIENT_TYPE, client.getClientType())
+            .claim(ClientConstants.CLAIM_KEY_CLIENT_ID, client.getClientId())
             .setIssuedAt(now)
             .setExpiration(expireTime)
             .signWith(signKey, SignatureAlgorithm.HS256)
@@ -64,7 +65,7 @@ public class TokenUtil {
       if (claims.getBody().getExpiration().before(new Date())) {
         return false;
       }
-      String clientType = claims.getBody().get(ClientConstants.CLIENT_TYPE_CLAIM_KEY, String.class);
+      String clientType = claims.getBody().get(ClientConstants.CLAIM_KEY_CLIENT_TYPE, String.class);
 
       return clientType != null && clientType.equals(expectedType);
     } catch (JwtException | IllegalArgumentException e) {
@@ -115,9 +116,25 @@ public class TokenUtil {
             .parseClaimsJws(token)
             .getBody();
 
-    return claims.get(ClientConstants.CLIENT_TYPE_CLAIM_KEY, String.class);
+    return claims.get(ClientConstants.CLAIM_KEY_CLIENT_TYPE, String.class);
   }
 
+  /**
+   * For retrieving clientId field from inside the token.
+   */
+  public int getClientId(String token) {
+    Claims claims = Jwts.parserBuilder()
+            .setSigningKey(signKey)
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+
+    return claims.get(ClientConstants.CLAIM_KEY_CLIENT_ID, Integer.class);
+  }
+
+  /**
+   * Helper function to extract the token from the request header.
+   */
   public String extractToken(HttpServletRequest request) {
     String bearerToken = request.getHeader("Authorization");
     if (bearerToken != null && bearerToken.startsWith("Bearer ")) {

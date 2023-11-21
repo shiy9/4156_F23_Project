@@ -5,9 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+
+/**
+ * Currently handles all AccessDeniedException thrown globally (for this project, they will be
+ * from the @PreAuthorize failures from different Item-related and Order-related requests.
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

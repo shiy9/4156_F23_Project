@@ -26,7 +26,8 @@ public final class ClientConstants {
   // Login related keys
   public static final String LOGIN_BODY_MESSAGE_KEY = "message";
   public static final String LOGIN_BODY_TOKEN_KEY = "token";
-  public static final String CLIENT_TYPE_CLAIM_KEY = "clientType";
+  public static final String CLAIM_KEY_CLIENT_TYPE = "clientType";
+  public static final String CLAIM_KEY_CLIENT_ID = "clientId";
 
   // Client types
   public static final String CLIENT_TYPE_RETAIL = "retail";

@@ -14,7 +14,7 @@
     </insert>
 
     <select id="getClient" resultType="com.ims.entity.Client">
-        SELECT email, password, client_type AS clientType
+        SELECT client_id AS clientId, email, password, client_type AS clientType
         FROM Clients
         WHERE email = #{email}
     </select>
