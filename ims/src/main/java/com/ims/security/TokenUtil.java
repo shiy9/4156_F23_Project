@@ -11,6 +11,7 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 
@@ -20,9 +21,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TokenUtil {
-  private final String secretKey = "TDtq7U2k8d6YXjxFoNjznbUUaxY8VW6aG.FfeaAs7AyXrGgEVyYxQ_jNRTZ6";
   private final long validDuration = 3600000; // in ms, expire in 1 hr after generating
-  private final Key signKey = Keys.hmacShaKeyFor(secretKey.getBytes());
+  private final Key signKey;
+
+  public TokenUtil(Environment env) {
+    String secretKey = env.getProperty("tokenSecretKey");
+    this.signKey = Keys.hmacShaKeyFor(secretKey.getBytes());
+  }
 
   /**
    * Generating the JWT token.

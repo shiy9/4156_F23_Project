@@ -4,10 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://coms4156.ctxbce6x3frp.us-east-2.rds.amazonaws.com:3306/coms4156
-      #    url: jdbc:mysql://google/coms4156?cloudSqlInstance=coms4156-402215:us-central1:iheartapi&socketFactory=com.google.cloud.sql.mysql.SocketFactory
-    username: admin
-    password: 12345678
+    url: ${db.link}
+    username: ${db.username}
+    password: ${db.password}
 
 
 mybatis:
@@ -18,4 +17,4 @@ mybatis:
 
 google:
   maps:
-    api-key: AIzaSyA3ZVkywYSxyFXqvfV5mYyTRx59Wrzt11s
+    api-key: ${gmaps.api-key}

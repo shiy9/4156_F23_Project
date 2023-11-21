@@ -34,3 +34,6 @@ build/
 
 ### MAC ###
 .DS_Store
+
+### Credentials file ###
+src/main/resources/ims-secret.properties
