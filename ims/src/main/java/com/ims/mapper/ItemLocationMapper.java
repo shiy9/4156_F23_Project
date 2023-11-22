@@ -16,6 +16,8 @@ public interface ItemLocationMapper {
 
   int insert(ItemLocation itemLocation);
 
+  int update(ItemLocation itemLocation);
+
   List<ItemLocation> getItemLocationsByItemId(@Param("itemId") Integer itemId);
 
   List<ItemLocation> getItemLocationsByLocationId(@Param("locationId") Integer locationId);

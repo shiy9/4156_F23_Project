@@ -23,6 +23,8 @@ public interface ItemManagementService {
 
   String insertItemLocation(ItemLocation itemLocation);
 
+  String updateItemLocation(ItemLocation itemLocation);
+
   List<ItemLocation> getItemLocationsByItemId(Integer itemId);
 
   List<ItemLocation> getItemLocationsByLocationId(Integer locationId);

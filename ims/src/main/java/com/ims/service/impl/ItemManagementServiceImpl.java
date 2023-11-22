@@ -119,6 +119,36 @@ public class ItemManagementServiceImpl implements ItemManagementService {
   }
 
   @Override
+  @Transactional
+  public String updateItemLocation(ItemLocation itemLocation) {
+    Integer itemId = itemLocation.getItemId();
+    Integer locationId = itemLocation.getLocationId();
+
+    Item item = itemMapper.getItemByItemId(itemId);
+    if (item == null) {
+      return ItemMessages.INVALID_ITEM_ID;
+    }
+    Location location = locationMapper.getLocationById(locationId);
+    if (location == null) {
+      return ItemMessages.INVALID_LOCATION_ID;
+    }
+
+    int oldLocationQuantity = itemLocationMapper.getItemLocationById(itemId, locationId).getQuantityAtLocation();
+    int updatedLocationQuantity = itemLocation.getQuantityAtLocation();
+    int quantityDifference = updatedLocationQuantity - oldLocationQuantity;
+
+    int updateResult = itemLocationMapper.update(itemLocation);
+    if (updateResult > 0) {
+      item.setCurrentStockLevel(item.getCurrentStockLevel() + quantityDifference);
+      if (itemMapper.update(item) > 0) {
+        return ItemMessages.UPDATE_SUCCESS;
+      }
+    }
+
+    return ItemMessages.UPDATE_FAILURE;
+  }
+
+  @Override
   public List<ItemLocation> getItemLocationsByItemId(Integer itemId) {
     return itemLocationMapper.getItemLocationsByItemId(itemId);
   }

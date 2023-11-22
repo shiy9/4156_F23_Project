@@ -27,12 +27,28 @@
 
     <insert id="insert" parameterType="Item" useGeneratedKeys="true" keyProperty="itemId" keyColumn="item_id">
         INSERT INTO Items (item_id, client_id, name, current_stock_level, description, price, barcode)
-        VALUES (#{itemId}, #{clientId}, #{name}, #{currentStockLevel}, #{description}, #{price}, #{barcode})
+        VALUES (#{itemId}, #{clientId}, #{name}, 0, #{description}, #{price}, #{barcode})
     </insert>
 
     <update id="update" parameterType="Item">
         UPDATE Items
-        SET name = #{name}, current_stock_level = #{currentStockLevel}, description = #{description}, price = #{price}, barcode = #{barcode}
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="currentStockLevel != null">
+                current_stock_level = #{currentStockLevel},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="barcode != null">
+                barcode = #{barcode},
+            </if>
+        </set>
         WHERE item_id = #{itemId}
     </update>
 

@@ -130,7 +130,9 @@ corner of the IDE, which will start running the server at `http://localhost:8001
 ### Item Related
 `/location/create`
 - **Method**: POST
-- **Request Body**: JSON containing location details (locationId, name, address1, address2, locationType, userId)
+- **Request Body**: JSON containing location details:
+  - `Required`: clientId, name, address1, zipCode
+  - `Optional`: address2, locationType
 - **Expected Response**:
   - `200`: Insert successful
   - `400`: Insert failed
@@ -144,10 +146,13 @@ corner of the IDE, which will start running the server at `http://localhost:8001
 
 `/item/create`
 - **Method**: POST
-- **Request Body**: JSON containing item details (itemId, userId, name, description, price, current_stock_level, barcode)
+- **Request Body**: JSON containing item details
+  - `Required`: clientId, name, price
+  - `Optional`: description
 - **Expected Response**:
   - `200`: Insert successful
   - `400`: Insert failed
+- **Note**: The current_stock_level of the item will be set to 0 by default.
 
 `/item/get/{id}`
 - **Method**: GET
@@ -156,19 +161,20 @@ corner of the IDE, which will start running the server at `http://localhost:8001
   - `200`: Item
   - `404`: Not Found
 
-`/item/getByUserId/{userId}`
-- **Method**: GET
-- **Request Body**:  {userId} - The userID of the user to retrieve items for
-- **Expected Response**:
-  - `200`: List of Items
-  - `404`: Not Found
-
 `/item/update`
 - **Method**: POST
 - **Request Body**: JSON containing item details to be updated (itemId must be present)
 - **Expected Response**:
   - `200`: Update successful
   - `400`: Update failed
+
+`/item/getByClientId/{clientId}`
+- **Method**: GET
+- **Request Body**:  {clientId} - The clientId of the client to retrieve items for
+- **Expected Response**:
+  - `200`: List of Items
+  - `404`: Not Found
+
 
 `/item/generateBarcode/{id}`
 - **Method**: GET
@@ -192,8 +198,6 @@ corner of the IDE, which will start running the server at `http://localhost:8001
   - `404`: Not Found
 
 
-
-
 `/itemLocation/create`
 - **Method**: POST
 - **Request Body**: JSON containing itemLocation details (itemId, locationId, quantityAtLocation)
@@ -203,6 +207,16 @@ corner of the IDE, which will start running the server at `http://localhost:8001
 - **Note**: Since we require a valid Item and Location to exist before creating an ItemLocation, there
 are several failure messages available here.This endpoint will also update the current_stock_level of the Items table by 
 adding the quantityAtLocation to the current_stock_level.
+
+
+`/itemLocation/update`
+- **Method**: POST
+- **Request Body**: JSON containing itemLocation to be updated(itemId, locationId, quantityAtLocation)
+- **Expected Response**:
+  - `200`: Update successful
+  - `400`: Invalid item id / Invalid location id / Update failed
+- **Note**: The only modifiable field is quantityAtLocation. This endpoint will also update the current_stock_level of the Items table by
+adding the difference of quantityAtLocation to the current_stock_level.
 
 `/itemLocation/get/{itemId}/{locationId}`
 - **Method**: GET

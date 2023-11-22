@@ -21,6 +21,12 @@
         VALUES (#{itemId}, #{locationId}, #{quantityAtLocation})
     </insert>
 
+    <update id="update" parameterType="ItemLocation">
+        UPDATE ItemLocation
+        SET quantity_at_location = #{quantityAtLocation}
+        WHERE item_id = #{itemId} AND location_id = #{locationId}
+    </update>
+
     <select id="getItemLocationsByItemId" resultMap="itemLocationMap">
         SELECT * FROM ItemLocation WHERE item_id = #{itemId}
     </select>

@@ -294,6 +294,24 @@ public class ItemController {
   }
 
   /**
+   * Endpoint to update an item location.
+   *
+   * @param itemLocation The item location object.
+   * @return ResponseEntity containing the result of the operation.
+   */
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
+          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
+  @PostMapping("/itemLocation/update")
+  public ResponseEntity<String> updateItemLocation(@RequestBody ItemLocation itemLocation) {
+    String result = itemManagementService.updateItemLocation(itemLocation);
+    if (result.equals(ItemMessages.UPDATE_SUCCESS)) {
+      return ResponseEntity.ok(result);
+    } else {
+      return ResponseEntity.badRequest().body(result);
+    }
+  }
+
+  /**
    * Endpoint to show reorder alert.
    * @return ResponseEntity containing the result of the operation.
    */
