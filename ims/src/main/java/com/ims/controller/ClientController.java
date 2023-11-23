@@ -75,7 +75,7 @@ public class ClientController {
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody Client client) {
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    Map<String, String> response = new HashMap<>();
+    Map<String, Object> response = new HashMap<>();
 
     // Attempt to find the client
     Client curClient = clientService.getClient(client.getEmail());
@@ -94,6 +94,7 @@ public class ClientController {
     String token = tokenUtil.createToken(curClient);
     response.put(ClientConstants.LOGIN_BODY_MESSAGE_KEY, ClientConstants.LOGIN_SUCCESS);
     response.put(ClientConstants.LOGIN_BODY_TOKEN_KEY, token);
+    response.put(ClientConstants.LOGIN_BODY_CLIENT_ID, curClient.getClientId());
 
     return ResponseEntity.ok(response);
   }

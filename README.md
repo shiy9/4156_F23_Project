@@ -42,7 +42,8 @@ corner of the IDE, which will start running the server at `http://localhost:8001
     - ```json
       {
         "message": "message explaining request status",
-        "token": "authentication_token"
+        "token": "authentication_token",
+        "clientId": <clientId>
       }
       ```
     - The response body will NOT contain a token if login was not successful.
