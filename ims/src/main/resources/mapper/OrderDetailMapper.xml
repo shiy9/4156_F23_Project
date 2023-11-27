@@ -26,7 +26,7 @@
 
     <insert id="insert" parameterType="OrderDetail" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">
         INSERT INTO OrderDetail (order_id, item_id, quantity, amount, due_date)
-        VALUES (#{item_id}, #{quantity}, #{amount}, #{due_date})
+        VALUES (#{orderId}, #{itemId}, #{quantity}, #{amount}, #{dueDate})
     </insert>
 
     <update id="update" parameterType="OrderDetail">

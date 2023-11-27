@@ -24,4 +24,5 @@ public final class OrderMessages {
   public static final String ORDER_DETAIL_DELETE_SUCCESS = "Order detail Deleted Successfully";
   public static final String ORDER_DETAIL_INVALID_ID = "Invalid order detail id";
   public static final String ORDER_DETAIL_RETRIEVE_FAILURE = "Order detail retrieve failed.";
+
 }

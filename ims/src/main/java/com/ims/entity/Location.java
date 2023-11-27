@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class Location {
   private Integer locationId;
   private String name;
+  private String locationType;
   private String address1;
   private String address2;
   private String clientId;

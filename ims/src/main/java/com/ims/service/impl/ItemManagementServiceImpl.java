@@ -8,6 +8,7 @@ import com.ims.constants.ItemMessages;
 import com.ims.entity.Item;
 import com.ims.entity.ItemLocation;
 import com.ims.entity.Location;
+import com.ims.entity.OrderDetail;
 import com.ims.mapper.ItemLocationMapper;
 import com.ims.mapper.ItemMapper;
 import com.ims.mapper.LocationMapper;
@@ -207,6 +208,21 @@ public class ItemManagementServiceImpl implements ItemManagementService {
   @Override
   public List<Item> getReorderItem(){
     return itemMapper.getReorderItem();
+  }
+
+  @Override
+  public String decreaseItem(OrderDetail orderDetail) {
+    Item item = itemMapper.getItemByItemId(orderDetail.getItemId());
+    if (item == null) {
+      return ItemMessages.INVALID_ITEM_ID;
+    }
+    if (item.getCurrentStockLevel() >= orderDetail.getQuantity()) {
+      itemMapper.updateStock(orderDetail);
+      return ItemMessages.UPDATE_SUCCESS;
+    }
+    else {
+      return ItemMessages.OUT_OF_CURRENT_STOCK_LEVEL;
+    }
   }
 
 }

@@ -16,14 +16,14 @@
     </resultMap>
 
     <select id="getLocationById" resultMap="locationMap">
-        SELECT location_id, name, address_1, address_2, client_id, zip_code, latitude, longitude
+        SELECT location_id, name, address_1, address_2, client_id, zipcode, latitude, longitude
         FROM Locations
         WHERE location_id = #{locationId}
     </select>
 
     <insert id="insert" parameterType="Location" useGeneratedKeys="true" keyProperty="locationId" keyColumn="location_id">
-        INSERT INTO Locations (location_id, name, address_1, address_2, client_id, zip_code, latitude, longitude)
-        VALUES (#{locationId}, #{name}, #{address1}, #{address2}, #{clientId}, #{zipCode}, #{latitude}, #{longitude})
+        INSERT INTO Locations (location_id, name, location_type, address_1, address_2, client_id, zipcode, latitude, longitude)
+        VALUES (#{locationId}, #{name}, #{locationType}, #{address1}, #{address2}, #{clientId}, #{zipCode}, #{latitude}, #{longitude})
     </insert>
 
 </mapper>

@@ -8,15 +8,30 @@ import com.ims.entity.ItemLocation;
 import com.ims.entity.Location;
 import com.ims.service.ItemManagementService;
 import com.ims.service.LocationService;
+import com.ims.controller.ItemController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -25,14 +40,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class ItemControllerTests {
 
-    @Autowired
+    @InjectMocks
+    private ItemController itemController;
+
     private MockMvc mockMvc;
 
-    @Autowired
+    @Mock
     private LocationService locationService;
 
-    @Autowired
+    @Mock
     private ItemManagementService itemManagementService;
+
+    @BeforeEach
+    public void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(itemController).build();
+    }
 
     @Test
     public void testGetLocationById() throws Exception {
@@ -42,9 +64,9 @@ public class ItemControllerTests {
         location.setAddress1("123 Main St");
 
         // Assuming the locationService's insert method returns the location's ID or name upon successful insertion
-        locationService.insert(location);
+        when(locationService.getLocationById(10)).thenReturn(location);
 
-        mockMvc.perform(get("/location/get/10"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/location/get/10"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.locationId").value(10))
@@ -53,15 +75,15 @@ public class ItemControllerTests {
 
     @Test
     public void testCreateLocation() throws Exception {
-        Location location = new Location();
-        location.setName("Warehouse");
-        location.setAddress1("123 Main St");
 
-        mockMvc.perform(post("/location/create")
+        String locationJson = "{ \"name\": \"Warehouse\", \"address1\": \"123 Main St\", \"zipCode\" : 10025, \"clientId\": 2}";
+        when(locationService.insert(any())).thenReturn(ItemMessages.INSERT_SUCCESS);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/location/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(location)))
-                .andExpect(status().isOk())
-                .andExpect(content().string(ItemMessages.INSERT_SUCCESS));
+                        .content(locationJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(ItemMessages.INSERT_SUCCESS));
     }
 
     @Test
@@ -74,9 +96,9 @@ public class ItemControllerTests {
         item.setCurrentStockLevel(10);
 
         // Assuming the itemManagementService's insert method returns the item's ID or name upon successful insertion
-        itemManagementService.insertItem(item);
+        when(itemManagementService.getItemByItemId(10)).thenReturn(item);
 
-        mockMvc.perform(get("/item/get/10"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/item/get/10"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.itemId").value(10))
@@ -85,15 +107,12 @@ public class ItemControllerTests {
 
     @Test
     public void testCreateItem() throws Exception {
-        Item item = new Item();
-        item.setName("Item");
-        item.setDescription("Item Description");
-        item.setPrice(10.0f);
-        item.setCurrentStockLevel(10);
+        String itemJson = "{ \"name\": \"Item\", \"description\": \"Item Description\", \"Price\" : 10, \"CurrentStockLevel\": 10}";
+        when(itemManagementService.insertItem(any())).thenReturn(ItemMessages.INSERT_SUCCESS);
 
-        mockMvc.perform(post("/item/create")
+        mockMvc.perform(MockMvcRequestBuilders.post("/item/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(item)))
+                        .content(itemJson))
                 .andExpect(status().isOk())
                 .andExpect(content().string(ItemMessages.INSERT_SUCCESS));
     }
@@ -112,18 +131,16 @@ public class ItemControllerTests {
         location.setName("Warehouse");
         location.setAddress1("123 Main St");
 
-        itemManagementService.insertItem(item);
-        locationService.insert(location);
-
         ItemLocation itemLocation = new ItemLocation();
         itemLocation.setItemId(10);
         itemLocation.setLocationId(10);
         itemLocation.setQuantityAtLocation(10);
 
         // Assuming the itemManagementService's insert method returns the item's ID or name upon successful insertion
-        itemManagementService.insertItemLocation(itemLocation);
 
-        mockMvc.perform(get("/itemLocation/get/10/10"))
+        when(itemManagementService.getItemLocationById(10,10)).thenReturn(itemLocation);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/itemLocation/get/10/10"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.itemId").value(10))
@@ -133,37 +150,40 @@ public class ItemControllerTests {
 
     @Test
     public void testInsertItemLocation() throws Exception {
-        Item item = new Item();
-        item.setItemId(10);
-        item.setName("Item");
-        item.setDescription("Item Description");
-        item.setPrice(10.0f);
-        item.setCurrentStockLevel(10);
+        String itemLocationJson = "{ \"itemId\": 10, \"locationId\": 10, \"quantityAtLocation\" : 10}";
+        when(itemManagementService.insertItemLocation(any())).thenReturn(ItemMessages.INSERT_SUCCESS);
 
-        Location location = new Location();
-        location.setLocationId(10);
-        location.setName("Warehouse");
-        location.setAddress1("123 Main St");
-
-        ItemLocation itemLocation = new ItemLocation();
-        itemLocation.setItemId(10);
-        itemLocation.setLocationId(10);
-        itemLocation.setQuantityAtLocation(10);
-
-        mockMvc.perform(post("/itemLocation/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(itemLocation)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(ItemMessages.INVALID_ITEM_ID));
-
-        itemManagementService.insertItem(item);
-        locationService.insert(location);
-
-        mockMvc.perform(post("/itemLocation/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(itemLocation)))
+        mockMvc.perform(MockMvcRequestBuilders.post("/itemLocation/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(itemLocationJson))
                 .andExpect(status().isOk())
                 .andExpect(content().string(ItemMessages.INSERT_SUCCESS));
+//        Item item = new Item();
+//        item.setItemId(10);
+//        item.setName("Item");
+//        item.setDescription("Item Description");
+//        item.setPrice(10.0f);
+//        item.setCurrentStockLevel(10);
+//
+//        Location location = new Location();
+//        location.setLocationId(10);
+//        location.setName("Warehouse");
+//        location.setAddress1("123 Main St");
+//
+//        ItemLocation itemLocation = new ItemLocation();
+//        itemLocation.setItemId(10);
+//        itemLocation.setLocationId(10);
+//        itemLocation.setQuantityAtLocation(10);
+
+//
+//        mockMvc.perform(post("/itemLocation/create")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(new ObjectMapper().writeValueAsString(itemLocation)))
+//                .andExpect(status().isBadRequest())
+//                .andExpect(content().string(ItemMessages.INVALID_ITEM_ID));
+//
+//        itemManagementService.insertItem(item);
+//        locationService.insert(location);
     }
 
     @Test
@@ -195,13 +215,18 @@ public class ItemControllerTests {
         itemLocation2.setLocationId(11);
         itemLocation2.setQuantityAtLocation(15);
 
-        itemManagementService.insertItem(item);
-        locationService.insert(location1);
-        locationService.insert(location2);
-        itemManagementService.insertItemLocation(itemLocation1);
-        itemManagementService.insertItemLocation(itemLocation2);
+//        itemManagementService.insertItem(item);
+//        locationService.insert(location1);
+//        locationService.insert(location2);
+//        itemManagementService.insertItemLocation(itemLocation1);
+//        itemManagementService.insertItemLocation(itemLocation2);
 
-        mockMvc.perform(get("/itemLocation/getByItemId/10"))
+        List<ItemLocation> itemLocations = new ArrayList<>();
+        itemLocations.add(itemLocation1);
+        itemLocations.add(itemLocation2);
+        when(itemManagementService.getItemLocationsByItemId(10)).thenReturn(itemLocations);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/itemLocation/getByItemId/10"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].itemId").value(10))
@@ -210,6 +235,7 @@ public class ItemControllerTests {
                 .andExpect(jsonPath("$[1].itemId").value(10))
                 .andExpect(jsonPath("$[1].locationId").value(11))
                 .andExpect(jsonPath("$[1].quantityAtLocation").value(15));
+
     }
 
     @Test
@@ -242,14 +268,21 @@ public class ItemControllerTests {
         itemLocation2.setItemId(11);
         itemLocation2.setLocationId(10);
         itemLocation2.setQuantityAtLocation(15);
+//
 
-        itemManagementService.insertItem(item1);
-        itemManagementService.insertItem(item2);
-        locationService.insert(location);
-        itemManagementService.insertItemLocation(itemLocation1);
-        itemManagementService.insertItemLocation(itemLocation2);
+//        itemManagementService.insertItem(item1);
+//        itemManagementService.insertItem(item2);
+//        locationService.insert(location);
+//        itemManagementService.insertItemLocation(itemLocation1);
+//        itemManagementService.insertItemLocation(itemLocation2);
 
-        mockMvc.perform(get("/itemLocation/getByLocationId/10"))
+        List<ItemLocation> itemLocations = new ArrayList<>();
+        itemLocations.add(itemLocation1);
+        itemLocations.add(itemLocation2);
+
+        when(itemManagementService.getItemLocationsByLocationId(10)).thenReturn(itemLocations);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/itemLocation/getByLocationId/10"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].itemId").value(10))

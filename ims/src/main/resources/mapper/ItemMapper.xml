@@ -13,7 +13,7 @@
         <result property="barcode" column="barcode"/>
     </resultMap>
 
-    <select id="getItemByItemId" resultMap="itemMap">
+    <select id="getItemByItemId" resultMap="itemMap" parameterType="int">
         SELECT item_id, client_id, name, current_stock_level, description, price, barcode
         FROM Items
         WHERE item_id = #{itemId}
@@ -57,5 +57,11 @@
         FROM Items
         WHERE current_stock_level &lt;= 5
     </select>
+
+    <update id="updateStock" parameterType="orderDetail">
+        UPDATE Items
+        SET current_stock_level = current_stock_level - #{quantity}
+        WHERE item_id = #{itemId}
+    </update>
 
 </mapper>

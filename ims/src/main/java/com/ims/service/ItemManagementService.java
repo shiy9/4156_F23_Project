@@ -2,6 +2,7 @@ package com.ims.service;
 
 import com.ims.entity.Item;
 import com.ims.entity.ItemLocation;
+import com.ims.entity.OrderDetail;
 import java.util.List;
 
 /**
@@ -32,4 +33,6 @@ public interface ItemManagementService {
   List<ItemLocation> getItemLocationsWithin50Miles(Integer itemId, Integer locationId);
 
   List<Item> getReorderItem();
+
+  String decreaseItem(OrderDetail orderDetail);
 }

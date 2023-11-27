@@ -1,8 +1,10 @@
 package com.ims.controller;
 
+import com.ims.constants.ItemMessages;
 import com.ims.constants.OrderMessages;
 import com.ims.entity.Order;
 import com.ims.entity.OrderDetail;
+import com.ims.service.ItemManagementService;
 import com.ims.service.OrderService;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +33,9 @@ public class OrderController {
 
   @Autowired
   private OrderService orderService;
+
+  @Autowired
+  private ItemManagementService itemManagementService;
 
   //Order related
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
@@ -96,10 +103,19 @@ public class OrderController {
   //OrderDetail related
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
+  @Transactional(propagation = Propagation.REQUIRED)
   @PostMapping("/detail/create")
   public ResponseEntity<String> createOrderDetail(@RequestBody OrderDetail orderDetail) {
-    orderService.createOrderDetail(orderDetail);
-    return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_CREATE_SUCCESS);
+    String result = itemManagementService.decreaseItem(orderDetail);
+    if (result.equals(ItemMessages.UPDATE_SUCCESS)) {
+      orderService.createOrderDetail(orderDetail);
+      return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_CREATE_SUCCESS);
+    }
+    else {
+      return ResponseEntity.badRequest().body(result);
+    }
+//    orderService.createOrderDetail(orderDetail);
+//    return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_CREATE_SUCCESS);
   }
 
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "

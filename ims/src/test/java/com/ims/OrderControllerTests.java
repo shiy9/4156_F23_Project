@@ -4,10 +4,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
+import com.ims.constants.ItemMessages;
 import com.ims.constants.OrderMessages;
 import com.ims.controller.OrderController;
 import com.ims.entity.Order;
 import com.ims.entity.OrderDetail;
+import com.ims.service.ItemManagementService;
 import com.ims.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -38,6 +41,9 @@ public class OrderControllerTests {
 
   @Mock
   private OrderService orderService;
+
+  @Mock
+  private ItemManagementService itemManagementService;
 
   private MockMvc mockMvc;
 
@@ -122,7 +128,8 @@ public class OrderControllerTests {
 
   @Test
   public void createOrderDetailTest() throws Exception {
-    String orderDetailJson = "{\"orderId\": 1, \"itemId\": 101, \"quantity\": 2, \"amount\": 150.0 }";
+    String orderDetailJson = "{\"orderId\": 1, \"itemId\": 1, \"quantity\": 2, \"amount\": 150.0 }";
+    when(itemManagementService.decreaseItem(any())).thenReturn(ItemMessages.UPDATE_SUCCESS);
     doNothing().when(orderService).createOrderDetail(any());
 
     mockMvc.perform(MockMvcRequestBuilders.post("/order/detail/create")
