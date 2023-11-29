@@ -1,0 +1,38 @@
+name: "Build & analysis & testing"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  setup-build:
+    if: github.repository == 'shiy9/4156_F23_Project'
+    name: Setup, Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout repository
+
+      - name: Set up JDK 20
+        uses: actions/setup-java@v3
+        with:
+          java-version: 20
+          server-id: github
+          distribution: 'adopt'
+          settings-path: ${{ github.workspace }}
+
+      - name: Set up Environment Variables
+        run: |
+          echo "DBLINK=${{ secrets.DBLINK }}" >> $GITHUB_ENV
+          echo "DBUSERNAME=${{ secrets.DBUSERNAME }}" >> $GITHUB_ENV
+          echo "DBPASSWORD=${{ secrets.DBPASSWORD }}" >> $GITHUB_ENV     
+          echo "GMAPSAPIKEY=${{ secrets.GMAPSAPIKEY }}" >> $GITHUB_ENV
+          echo "TOKENSECRETKEY=${{ secrets.TOKENSECRETKEY }}" >> $GITHUB_ENV
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Run Unit tests & Integration tests
+        run: mvn test
