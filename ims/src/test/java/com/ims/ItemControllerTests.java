@@ -292,4 +292,24 @@ public class ItemControllerTests {
                 .andExpect(jsonPath("$[1].locationId").value(10))
                 .andExpect(jsonPath("$[1].quantityAtLocation").value(15));
     }
+
+    @Test
+    public void testReorderAlert() throws Exception {
+        Item item = new Item();
+        item.setItemId(10);
+        item.setName("Item");
+        item.setDescription("Item Description");
+        item.setPrice(10.0f);
+        item.setCurrentStockLevel(5);
+
+        List<Item> items = Collections.singletonList(item);
+        when(itemManagementService.getReorderItem()).thenReturn(items);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/item/reorderAlert"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].itemId").value(10))
+                .andExpect(jsonPath("$[0].name").value("Item"));
+    }
+
 }
