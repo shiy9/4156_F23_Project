@@ -30,8 +30,22 @@
     </insert>
 
     <update id="update" parameterType="OrderDetail">
+        SET item_id = #{itemId}, quantity = #{quantity}, amount = #{amount}, due_date = #{dueDate}
         UPDATE OrderDetail
-        SET item_id = #{item_Id}, quantity = #{quantity}, amount = #{amount}, due_date = #{due_date}
+        <set>
+            <if test="itemId != null">
+                item_id = #{itemId},
+            </if>
+            <if test="quantity != null">
+                quantity = #{quantity},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="due_date != null">
+                due_date = #{dueDate},
+            </if>
+        </set>
         WHERE order_id = #{orderId}
     </update>
 

@@ -24,7 +24,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -196,6 +199,55 @@ public class OrderControllerTests {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().string(OrderMessages.ORDER_DETAIL_DELETE_SUCCESS));
   }
+  @Test
+  public void returnAlertTest() throws Exception {
+//    String dateString = "2023-11-29";
+//    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//    Date date = dateFormat.parse(dateString);
+    Date date = new Date();
+    OrderDetail mockOrderDetail = new OrderDetail();
+    mockOrderDetail.setOrderId(2);
+    mockOrderDetail.setItemId(203);
+    mockOrderDetail.setQuantity(200);
+    mockOrderDetail.setAmount(2.0);
+    mockOrderDetail.setDueDate(date);
+    List<OrderDetail> mockOrderDetails = Collections.singletonList(mockOrderDetail);
+    when(orderService.getReturnAlertItem()).thenReturn(mockOrderDetails);
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/order/returnAlert"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].orderId").value(2))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].itemId").value(203))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].quantity").value(200))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].amount").value(2.0))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].dueDate").value(date));
+  }
+
+  @Test
+  public void expirationAlertTest() throws Exception {
+    String dateString = "2023-11-27";
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    Date date = dateFormat.parse(dateString);
+    OrderDetail mockOrderDetail = new OrderDetail();
+    mockOrderDetail.setOrderId(2);
+    mockOrderDetail.setItemId(203);
+    mockOrderDetail.setQuantity(200);
+    mockOrderDetail.setAmount(2.0);
+    mockOrderDetail.setDueDate(date);
+    List<OrderDetail> mockOrderDetails = Collections.singletonList(mockOrderDetail);
+    when(orderService.getExpirationAlertItem()).thenReturn(mockOrderDetails);
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/order/expirationAlert"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].orderId").value(2))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].itemId").value(203))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].quantity").value(200))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].amount").value(2.0))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].dueDate").value(date));
+  }
+
+
+
 }
 
 

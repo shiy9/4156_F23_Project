@@ -31,7 +31,20 @@
 
     <update id="update" parameterType="Order">
         UPDATE Orders
-        SET client_id = #{clientId}, type = #{type}, order_date = #{orderDate}, status = #{orderStatus}
+        <set>
+            <if test="clientId != null">
+                client_id = #{clientId},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="orderDate != null">
+                order_date = #{orderDate},
+            </if>
+            <if test="orderStatus != null">
+                order_status = #{orderStatus},
+            </if>
+        </set>
         WHERE order_id = #{orderId}
     </update>
 
