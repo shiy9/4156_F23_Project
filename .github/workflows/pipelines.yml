@@ -10,6 +10,7 @@ jobs:
     if: github.repository == 'shiy9/4156_F23_Project'
     name: Setup, Build
     runs-on: ubuntu-latest
+    environment: CD Environment
 
     steps:
       - uses: actions/checkout@v4
@@ -25,11 +26,11 @@ jobs:
 
       - name: Set up Environment Variables
         run: |
-          echo "DBLINK=${{ secrets.DBLINK }}" >> $GITHUB_ENV
-          echo "DBUSERNAME=${{ secrets.DBUSERNAME }}" >> $GITHUB_ENV
-          echo "DBPASSWORD=${{ secrets.DBPASSWORD }}" >> $GITHUB_ENV     
-          echo "GMAPSAPIKEY=${{ secrets.GMAPSAPIKEY }}" >> $GITHUB_ENV
-          echo "TOKENSECRETKEY=${{ secrets.TOKENSECRETKEY }}" >> $GITHUB_ENV
+          echo "DBLINK=$DBLINK"
+          echo "DBUSERNAME=$DBUSERNAME"
+          echo "DBPASSWORD=$DBPASSWORD"   
+          echo "GMAPSAPIKEY=$GMAPSAPIKEY"
+          echo "TOKENSECRETKEY=$TOKENSECRETKEY"
 
       - name: Build with Maven
         run: mvn -B package --file ims/pom.xml
