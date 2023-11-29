@@ -107,6 +107,13 @@ public class OrderController {
   }
 
   //OrderDetail related
+
+  /**
+   * Endpoint for creating an Order Detail.
+   *
+   * @param orderDetail the OrderDetail entity to be inserted into the database
+   * @return ResponseEntity representing if the request succeeded
+   */
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @Transactional(propagation = Propagation.REQUIRED)
@@ -119,10 +126,14 @@ public class OrderController {
     } else {
       return ResponseEntity.badRequest().body(result);
     }
-    //    orderService.createOrderDetail(orderDetail);
-    //    return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_CREATE_SUCCESS);
   }
 
+  /**
+   * Endpoint for updating an Order Detail.
+   *
+   * @param orderDetail the OrderDetail entity to be queried and updated
+   * @return ResponseEntity representing if the request succeeded
+   */
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @PutMapping("/detail/update")
@@ -131,6 +142,12 @@ public class OrderController {
     return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_UPDATE_SUCCESS);
   }
 
+  /**
+   * Endpoint for deleting an Order Detail.
+   *
+   * @param orderId the orderId to delete the target OrderDetail from database
+   * @return ResponseEntity representing if the request succeeded
+   */
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @DeleteMapping("/detail/delete/{orderId}")
@@ -139,6 +156,12 @@ public class OrderController {
     return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_DELETE_SUCCESS);
   }
 
+  /**
+   * Endpoint for retrieving an Order Detail by order ID.
+   *
+   * @param orderId the orderId to find the target OrderDetail from database
+   * @return ResponseEntity representing if the request succeeded
+   */
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @GetMapping("/detail/retrieve/order_id/{orderId}")
@@ -151,6 +174,13 @@ public class OrderController {
     }
   }
 
+  /**
+   * Endpoint for retrieving a list of Order Details associated by certain item (identified by
+   * itemId).
+   *
+   * @param itemId the itemId to find the associated Order Details
+   * @return ResponseEntity representing if the request succeeded
+   */
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @GetMapping("/detail/retrieve/item_id/{itemId}")
@@ -163,8 +193,12 @@ public class OrderController {
     }
   }
 
-  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
-          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
+  /**
+   * Endpoint sending a list of rental orders that are to be returned within the next 2 days.
+   *
+   * @return ResponseEntity representing if the request succeeded
+   */
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE)")
   @GetMapping("/returnAlert")
   public ResponseEntity<?> returnAlert() {
     List<OrderDetail> orderDetails = orderService.getReturnAlertItem();
@@ -175,8 +209,12 @@ public class OrderController {
     }
   }
 
-  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
-          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
+  /**
+   * Endpoint sending a list of rental orders that are past due.
+   *
+   * @return ResponseEntity representing if the request succeeded
+   */
+  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE)")
   @GetMapping("/expirationAlert")
   public ResponseEntity<?> expirationAlert() {
     List<OrderDetail> orderDetails = orderService.getExpirationAlertItem();

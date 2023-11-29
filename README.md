@@ -21,13 +21,44 @@ corner of the IDE, which will start running the server at `http://localhost:8001
 - To run all tests, in the IntelliJ IDE, right click on `ims/src/test/java/com/ims/` and click `Run Tests in ims`. This will currently give a nicer interface than the method below, although the command can be configured in later iterations.
   - Or, `cd` into the `ims` directory, and run `mvn test` in the terminal. (We need to `cd` into the directory 
     where the Maven configuration file `pom.xml` resides, or the command will fail.)
-    
+- Note that in the case of our project, the "unit tests" are directly calling the APIs and 
+  testing their outputs instead of testing individual functions as traditional unit tests do, 
+  which effectively make them meet the requirements of "internal integration tests".
+  Testing individual functions were not considered necessary in the case our application 
+  considering the hierarchy of Java Spring application.
+
+## How a third-party application can use the service
+- The service itself is stateless when it comes to managing client login, and it is the 
+  responsibility of the third-party application to store the `clientId` as well as `token` 
+  returned by the `/client/login` endpoint.
+  - The `clientId` represents the id of the client stored in the database and is needed to make 
+    Item and Order-related requests. See [API documentation](#api-endpoints) below for details.
+  - The `token` is required by all endpoints except for Client-related endpoints for 
+    authentication purposes. The request will fail without the token. See [explanation](#side-note-how-to-use-token-and-expected-token-behavior) below 
+    for details.
+- See [API documentation](#api-endpoints) below on the specific API endpoints provided by our 
+  service related to how to manage inventory Items and Orders.
 
 ## API Endpoints
 ### Client-related
 `/client/register`
 - **Method**: POST
-- **Request Body**: JSON containing client `email` and `password`
+  - **Request Body**: JSON containing client `email`, `password`, and `clientType`.
+    - Sample request body: 
+    ```json
+      {
+        "email": "email",
+        "password": "password1",
+        "clientType": "retail" 
+      }
+    ```
+    - `clientType` will only accept `"retail"` or `"warehouse"`. 
+      - `"retail"` represents typical retail stores that sells items to customers.
+      - `"warehouse"` represents warehouse stores like the Home Depot that both sells and rents 
+        items to customers.
+        - Subsequently, any endpoints related to renting such as the endpoint responsible for 
+          sending rental item expiration alert (rental item is past due) is only avaialble to 
+          `"warehouse"` clients.
 - **Expected Response**:
   - Response body is a message indicating whether the request succeeded or failed.
   - Response codes:
@@ -278,6 +309,16 @@ adding the difference of quantityAtLocation to the current_stock_level.
   `401` unauthorized will be returned along with a message saying "Not authorized to use this 
   endpoint."
 
+### Omitted Endpoints
+- Endpoint for retrieving recent order/sales summary. Reason: it is more of a stand-alone 
+  feature related to our service and implementing such endpoint would require a new database table.
+  The team originally decided to push the feature back until all essential APIs/client app are 
+  implemented and finish this one if we have time as it is not as important. 
+- Repair/scrap items, and maintenance alerts for items. Reason: this is another feature the team 
+  decided to push back since the more important functionality for a "warehouse" type client is 
+  being able to rent out equipments in the first place. This endpoint is meant to provide better 
+  tracking for rental equipments, but the team did not get a chance to implement it.
+
 
 &nbsp;
 <br>
@@ -285,6 +326,11 @@ adding the difference of quantityAtLocation to the current_stock_level.
 
 ## Style Checker
 - We are using the CheckStyle plugin on IntelliJ to check for potential style warning/errors.
+- To replicate the style checker, install the CheckStyle-IDEA plugin in IntelliJ. Then go to 
+  Settings -> Tools -> Checkstyle, and select Google Checks. 
+- You can now find the style checker at the bottom toolbar of IntelliJ and can run it at the 
+  current file, the current module, or the entire project. 
+- The report included in the repo is for the entire project.
 
 ## References
 ### Resources used when implementing JWT token
