@@ -12,7 +12,12 @@
 file (`pom.xml`) and prompt to configure Maven at the bottom right corner. Click the button to configure Maven.
   - Alternatively, run `mvn clean install` to install all needed dependencies to run the project
     (although the IDE configuration has always worked for our team).
-- To start the application and run Postman requests, start the `ImsApplication` on the top right
+- Due to security concerns, we have replaced database link, username, password, and google maps 
+  API key with environment variables. Follow the instructions below to run the service locally.
+- To start the application and run Postman requests, edit the `ImsApplication` run configuration 
+  in IntelliJ to include `TOKENSECRETKEY`, `DBLINK`, `DBUSERNAME`, `DBPASSWORD`, and 
+  `GMAPSAPIKEY` as environment variable keys. The exact values will be provided before the demo 
+  session. Then, start the `ImsApplication` on the top right
 corner of the IDE, which will start running the server at `http://localhost:8001`.
   - Alternatively, right click on `ims/src/main/java/com/ims/ImsApplication.java` and click the run button.
 
