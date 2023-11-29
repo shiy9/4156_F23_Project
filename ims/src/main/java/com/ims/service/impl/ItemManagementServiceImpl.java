@@ -134,7 +134,8 @@ public class ItemManagementServiceImpl implements ItemManagementService {
       return ItemMessages.INVALID_LOCATION_ID;
     }
 
-    int oldLocationQuantity = itemLocationMapper.getItemLocationById(itemId, locationId).getQuantityAtLocation();
+    int oldLocationQuantity = itemLocationMapper.getItemLocationById(itemId, locationId)
+            .getQuantityAtLocation();
     int updatedLocationQuantity = itemLocation.getQuantityAtLocation();
     int quantityDifference = updatedLocationQuantity - oldLocationQuantity;
 
@@ -206,7 +207,7 @@ public class ItemManagementServiceImpl implements ItemManagementService {
   }
 
   @Override
-  public List<Item> getReorderItem(){
+  public List<Item> getReorderItem() {
     return itemMapper.getReorderItem();
   }
 
@@ -219,8 +220,7 @@ public class ItemManagementServiceImpl implements ItemManagementService {
     if (item.getCurrentStockLevel() >= orderDetail.getQuantity()) {
       itemMapper.updateStock(orderDetail);
       return ItemMessages.UPDATE_SUCCESS;
-    }
-    else {
+    } else {
       return ItemMessages.OUT_OF_CURRENT_STOCK_LEVEL;
     }
   }

@@ -4,7 +4,8 @@ import com.ims.entity.Client;
 import org.springframework.stereotype.Repository;
 
 /**
- * Specific queries are linked in ims/src/main/resources/mapper/ClientMapper.xml
+ * Client query interface. Specific queries used by below functions are linked in
+ * ims/src/main/resources/mapper/ClientMapper.xml
  */
 @Repository
 public interface ClientMapper {

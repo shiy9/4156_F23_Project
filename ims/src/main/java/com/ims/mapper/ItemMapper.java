@@ -6,7 +6,10 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-
+/**
+ * Item query interface. Specific queries used by below functions are linked in
+ * ims/src/main/resources/mapper/ItemMapper.xml
+ */
 @Mapper
 public interface ItemMapper {
   Item getItemByItemId(@Param("itemId") Integer itemId);

@@ -15,7 +15,8 @@ public final class OrderMessages {
   public static final String ORDER_DELETE_SUCCESS = "Order Deleted Successfully";
   public static final String ORDER_INVALID_ID = "Invalid order id";
   public static final String ORDER_RETRIEVE_FAILURE = "No order found.";
-  public static final String ORDER_RETRIEVE_FAILURE_CLIENT = "No orders found for the given client.";
+  public static final String ORDER_RETRIEVE_FAILURE_CLIENT =
+          "No orders found for the given client.";
   public static final String ORDER_RETRIEVE_FAILURE_ITEM = "No orders found for the given item.";
 
   // Messages for OrderDetail

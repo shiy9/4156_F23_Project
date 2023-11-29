@@ -88,6 +88,12 @@ public class OrderController {
     }
   }
 
+  /**
+   * Endpoint to retrieve order by order ID.
+   *
+   * @param orderId the order ID
+   * @return ResponseEntity containing an order associated with the order ID.
+   */
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @GetMapping("/retrieve/order/{orderId}")
@@ -110,12 +116,11 @@ public class OrderController {
     if (result.equals(ItemMessages.UPDATE_SUCCESS)) {
       orderService.createOrderDetail(orderDetail);
       return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_CREATE_SUCCESS);
-    }
-    else {
+    } else {
       return ResponseEntity.badRequest().body(result);
     }
-//    orderService.createOrderDetail(orderDetail);
-//    return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_CREATE_SUCCESS);
+    //    orderService.createOrderDetail(orderDetail);
+    //    return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_CREATE_SUCCESS);
   }
 
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "

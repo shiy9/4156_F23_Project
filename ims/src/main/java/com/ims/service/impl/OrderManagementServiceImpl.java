@@ -2,13 +2,16 @@ package com.ims.service.impl;
 
 import com.ims.entity.Order;
 import com.ims.entity.OrderDetail;
-import com.ims.mapper.OrderMapper;
 import com.ims.mapper.OrderDetailMapper;
+import com.ims.mapper.OrderMapper;
 import com.ims.service.OrderService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementation of various Order Management Service functions.
+ */
 @Service
 public class OrderManagementServiceImpl implements OrderService {
 

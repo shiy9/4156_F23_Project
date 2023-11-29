@@ -9,18 +9,18 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface OrderDetailMapper {
-    int insert(OrderDetail orderDetail);
+  int insert(OrderDetail orderDetail);
 
-    void update(OrderDetail orderDetail);
+  void update(OrderDetail orderDetail);
 
-    int delete(Integer orderId);
+  int delete(Integer orderId);
 
-    List<OrderDetail> retrieveOrderDetailByOrderId(Integer orderId);
+  List<OrderDetail> retrieveOrderDetailByOrderId(Integer orderId);
 
-    List<OrderDetail> retrieveOrderDetailByItemId(Integer itemId);
+  List<OrderDetail> retrieveOrderDetailByItemId(Integer itemId);
 
-    List<OrderDetail> getReturnAlertItem();
+  List<OrderDetail> getReturnAlertItem();
 
-    List<OrderDetail> getExpirationAlertItem();
+  List<OrderDetail> getExpirationAlertItem();
 
 }
