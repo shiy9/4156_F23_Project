@@ -25,7 +25,7 @@ public class TokenUtil {
   private final Key signKey;
 
   public TokenUtil(Environment env) {
-    String secretKey = env.getProperty("tokenSecretKey");
+    String secretKey = env.getProperty("TOKENSECRETKEY");
     this.signKey = Keys.hmacShaKeyFor(secretKey.getBytes());
   }
 

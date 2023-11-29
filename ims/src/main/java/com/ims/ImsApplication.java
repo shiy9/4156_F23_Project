@@ -10,7 +10,6 @@ import org.springframework.context.annotation.PropertySource;
  */
 @SpringBootApplication
 @MapperScan(basePackages = "com.ims.mapper")
-@PropertySource("classpath:ims-secret.properties")
 public class ImsApplication {
   public static void main(String[] args) {
     SpringApplication.run(ImsApplication.class, args);
