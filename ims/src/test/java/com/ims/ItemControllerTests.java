@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import static org.hamcrest.Matchers.hasSize;
 
 
 import java.lang.reflect.Array;
@@ -312,4 +313,30 @@ public class ItemControllerTests {
                 .andExpect(jsonPath("$[0].name").value("Item"));
     }
 
+    @Test
+    public void testGetItemLocationsWithin50Miles() throws Exception {
+        Integer itemId = 1;
+        Integer locationId = 1;
+
+        // Create mock ItemLocation objects
+        ItemLocation mockLoc1 = new ItemLocation(itemId, locationId, 10);
+        ItemLocation mockItemLocation2 = new ItemLocation(itemId, locationId, 15);
+
+        List<ItemLocation> mockItemLocations = new ArrayList<>();
+        mockItemLocations.add(mockLoc1);
+        mockItemLocations.add(mockItemLocation2);
+
+        when(itemManagementService.getItemLocationsWithin50Miles(itemId, locationId)).thenReturn(mockItemLocations);
+
+        mockMvc.perform(get("/itemLocation/getWithin50Miles/{itemId}/{locationId}", itemId, locationId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(mockItemLocations.size())))
+                .andExpect(jsonPath("$[0].itemId").value(itemId))
+                .andExpect(jsonPath("$[0].locationId").value(locationId))
+                .andExpect(jsonPath("$[0].quantityAtLocation").value(mockLoc1.getQuantityAtLocation()))
+                .andExpect(jsonPath("$[1].itemId").value(itemId))
+                .andExpect(jsonPath("$[1].locationId").value(locationId))
+                .andExpect(jsonPath("$[1].quantityAtLocation").value(mockItemLocation2.getQuantityAtLocation()));
+    }
 }

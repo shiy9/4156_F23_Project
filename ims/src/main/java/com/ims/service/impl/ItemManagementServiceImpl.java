@@ -16,6 +16,7 @@ import com.ims.service.ItemManagementService;
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -166,7 +167,8 @@ public class ItemManagementServiceImpl implements ItemManagementService {
     Location givenLocation = locationMapper.getLocationById(locationId);
 
     for (ItemLocation itemLocation : allItemLocations) {
-      if (itemLocation.getLocationId() == locationId || itemLocation.getQuantityAtLocation() == 0) {
+      if (Objects.equals(itemLocation.getLocationId(), locationId)
+              || itemLocation.getQuantityAtLocation() == 0) {
         allItemLocations.remove(itemLocation);
         continue;
       }
