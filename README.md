@@ -14,6 +14,8 @@ file (`pom.xml`) and prompt to configure Maven at the bottom right corner. Click
     (although the IDE configuration has always worked for our team).
 - Due to security concerns, we have replaced database link, username, password, and google maps 
   API key with environment variables. Follow the instructions below to run the service locally.
+  - Note that this does not affect CI operations with GitHub actions as we have declared 
+    repository variables for CI.
 - To start the application and run Postman requests, edit the `ImsApplication` run configuration 
   in IntelliJ to include `TOKENSECRETKEY`, `DBLINK`, `DBUSERNAME`, `DBPASSWORD`, and 
   `GMAPSAPIKEY` as environment variable keys. The exact values will be provided before the demo 
@@ -26,11 +28,24 @@ corner of the IDE, which will start running the server at `http://localhost:8001
 - To run all tests, in the IntelliJ IDE, right click on `ims/src/test/java/com/ims/` and click `Run Tests in ims`. This will currently give a nicer interface than the method below, although the command can be configured in later iterations.
   - Or, `cd` into the `ims` directory, and run `mvn test` in the terminal. (We need to `cd` into the directory 
     where the Maven configuration file `pom.xml` resides, or the command will fail.)
-- Note that in the case of our project, the "unit tests" are directly calling the APIs and 
-  testing their outputs instead of testing individual functions as traditional unit tests do, 
-  which effectively make them meet the requirements of "internal integration tests".
-  Testing individual functions were not considered necessary in the case our application 
-  considering the hierarchy of Java Spring application.
+  - Since the `TokenUtil` class relies on environment variables, the environment variables 
+    listed in the [above section](#getting-started) also needs to be added to the unit tests run configuration.
+### Internal Integration Tests
+- In the case of our project, the "unit tests" are directly calling the APIs and 
+testing their outputs instead of testing individual functions as traditional unit tests do, 
+which effectively make them meet the requirements of "internal integration tests".
+Testing individual functions were not considered necessary in the case our application 
+considering the hierarchy of Java Spring application.
+- Internal integration tests for the APIs include `ClientControllerTests.java`, 
+  `ItemControllerTests.java`, and `OrderControllerTests.java`
+### External Integration Tests
+- The primary usage of third-party libraries in this project include the JWT library used in 
+  `TokenUtil` class and the Google Maps library used when retrieving item details within 50 
+  miles of a location in `ItemController`.
+- The `TokenUtilTests.java` is the external integration test for the JWT library. It thoroughly 
+  tests all the functionalities of the class and also mocks scenarios for when the token is 
+  invalid. See the file for more details.
+- Tests for the Google Maps library are included in `ItemControllerTests.java`
 
 ## How a third-party application can use the service
 - The service itself is stateless when it comes to managing client login, and it is the 

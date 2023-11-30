@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TokenUtil {
-  private final long validDuration = 3600000; // in ms, expire in 1 hr after generating
+  private long validDuration = 3600000; // in ms, expire in 1 hr after generating
   private final Key signKey;
 
   public TokenUtil(Environment env) {
@@ -69,7 +69,6 @@ public class TokenUtil {
 
       return clientType != null && clientType.equals(expectedType);
     } catch (JwtException | IllegalArgumentException e) {
-      // TODO: Log exception in the future?
       return false;
     }
   }
@@ -89,7 +88,6 @@ public class TokenUtil {
               .parseClaimsJws(token);
       return !claims.getBody().getExpiration().before(new Date());
     } catch (JwtException | IllegalArgumentException e) {
-      // TODO: Log exception in the future?
       return false;
     }
   }
@@ -141,5 +139,15 @@ public class TokenUtil {
       return bearerToken.substring(7);
     }
     return null;
+  }
+
+  /**
+   * Helper function that sets the expiration, for testing purpose ONLY (so we can set a token
+   * that expires in 1ms, which is invalid almost right away).
+   *
+   * @param exp the new expiration time in ms
+   */
+  public void setExp(long exp) {
+    this.validDuration = exp;
   }
 }
