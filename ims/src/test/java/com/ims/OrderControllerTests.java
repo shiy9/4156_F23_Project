@@ -59,7 +59,8 @@ public class OrderControllerTests {
 
   @Test
   public void createOrderTest() throws Exception {
-    String orderJson = "{ \"clientId\": 1, \"itemId\": 101, \"type\": \"cake\", \"orderStatus\": \"PENDING\" }";
+    String orderJson = "{ \"clientId\": 1, \"itemId\": 101, \"type\": \"buy\", \"orderStatus\": " +
+            "\"PENDING\" }";
     doNothing().when(orderService).createOrder(any());
 
     mockMvc.perform(MockMvcRequestBuilders.post("/order/create")
@@ -74,7 +75,7 @@ public class OrderControllerTests {
     Order mockOrder = new Order();
     mockOrder.setOrderId(1);
     mockOrder.setClientId(1);
-    mockOrder.setType("cake");
+    mockOrder.setType("buy");
     mockOrder.setOrderStatus("PENDING");
 
     List<Order> mockOrders = Collections.singletonList(mockOrder);
