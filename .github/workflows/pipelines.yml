@@ -42,6 +42,21 @@ jobs:
           GMAPSAPIKEY: ${{ secrets.GMAPSAPIKEY }}
           TOKENSECRETKEY: ${{ secrets.TOKENSECRETKEY }}
 
+      - name: Verify
+        run: mvn -B verify --file ims/pom.xml
+        env:
+          DBLINK: ${{ secrets.DBLINK }}
+          DBUSERNAME: ${{ secrets.DBUSERNAME }}
+          DBPASSWORD: ${{ secrets.DBPASSWORD }}
+          GMAPSAPIKEY: ${{ secrets.GMAPSAPIKEY }}
+          TOKENSECRETKEY: ${{ secrets.TOKENSECRETKEY }}    
+
+      - name: Upload JaCoCo Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: jacoco-report
+          path: ims/target/site/jacoco/ # Adjust to your project structure
+
 
   codeql-analysis:
     needs: setup-build
