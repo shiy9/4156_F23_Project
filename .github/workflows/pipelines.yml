@@ -23,16 +23,15 @@ jobs:
           distribution: 'adopt'
           settings-path: ${{ github.workspace }}
 
-      - name: Set up Environment Variables
-        run: |
-          echo "DBLINK=${{ secrets.DBLINK }}" >> $GITHUB_ENV
-          echo "DBUSERNAME=${{ secrets.DBUSERNAME }}" >> $GITHUB_ENV
-          echo "DBPASSWORD=${{ secrets.DBPASSWORD }}" >> $GITHUB_ENV   
-          echo "GMAPSAPIKEY=${{ secrets.GMAPSAPIKEY }}" >> $GITHUB_ENV
-          echo "TOKENSECRETKEY=${{ secrets.TOKENSECRETKEY }}" >> $GITHUB_ENV
 
       - name: Build with Maven
         run: mvn -B package --file ims/pom.xml
+        env:
+          DBLINK: ${{ secrets.DBLINK }}
+          DBUSERNAME: ${{ secrets.DBUSERNAME }}
+          DBPASSWORD: ${{ secrets.DBPASSWORD }}
+          GMAPSAPIKEY: ${{ secrets.GMAPSAPIKEY }}
+          TOKENSECRETKEY: ${{ secrets.TOKENSECRETKEY }}
 
       - name: Run Unit tests & Integration tests
         run: mvn test
