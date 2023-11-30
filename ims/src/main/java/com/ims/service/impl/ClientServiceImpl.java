@@ -18,8 +18,10 @@ public class ClientServiceImpl implements ClientService {
   @Autowired
   private ClientMapper clientMapper;
 
+  // Ends with 2-4 word character or hyphens (the top-level domain)
   private static final String EMAIL_REGEX = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 
+  // At least 8 characters long and contain at least one letter and one digit
   private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
 
   @Override
