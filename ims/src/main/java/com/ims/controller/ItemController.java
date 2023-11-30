@@ -162,7 +162,7 @@ public class ItemController {
         return ResponseEntity.badRequest().body(result);
       }
     } catch (Exception e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
+      return ResponseEntity.badRequest().body(ItemMessages.BARCODE_GENERATION_ERROR);
     }
   }
 
