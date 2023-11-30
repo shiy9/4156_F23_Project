@@ -9,6 +9,7 @@ import com.ims.constants.OrderMessages;
 import com.ims.controller.OrderController;
 import com.ims.entity.Order;
 import com.ims.entity.OrderDetail;
+import com.ims.entity.OrderJoinOrderDetail;
 import com.ims.service.ItemManagementService;
 import com.ims.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
@@ -88,14 +89,14 @@ public class OrderControllerTests {
 
   @Test
   public void retrieveOrdersByOrderIdTest() throws Exception {
-    Order mockOrder = new Order();
-    mockOrder.setOrderId(3);
-    mockOrder.setClientId(5);
-    mockOrder.setType("table");
-    mockOrder.setOrderStatus("PENDING");
+    OrderJoinOrderDetail mockOrderJoinOrderDetail = new OrderJoinOrderDetail();
+    mockOrderJoinOrderDetail.setOrderId(3);
+    mockOrderJoinOrderDetail.setClientId(5);
+    mockOrderJoinOrderDetail.setType("table");
+    mockOrderJoinOrderDetail.setOrderStatus("PENDING");
 
-    List<Order> mockOrders = Collections.singletonList(mockOrder);
-    when(orderService.retrieveOrdersById(3)).thenReturn(mockOrders);
+    List<OrderJoinOrderDetail> mockOrderJoinOrderDetails = Collections.singletonList(mockOrderJoinOrderDetail);
+    when(orderService.retrieveOrdersById(3)).thenReturn(mockOrderJoinOrderDetails);
 
     mockMvc.perform(MockMvcRequestBuilders.get("/order/retrieve/order/3")
                     .contentType("application/json"))

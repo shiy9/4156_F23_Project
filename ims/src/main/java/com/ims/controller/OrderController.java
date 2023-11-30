@@ -4,6 +4,7 @@ import com.ims.constants.ItemMessages;
 import com.ims.constants.OrderMessages;
 import com.ims.entity.Order;
 import com.ims.entity.OrderDetail;
+import com.ims.entity.OrderJoinOrderDetail;
 import com.ims.service.ItemManagementService;
 import com.ims.service.OrderService;
 import java.util.List;
@@ -98,7 +99,7 @@ public class OrderController {
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @GetMapping("/retrieve/order/{orderId}")
   public ResponseEntity<?> retrieveOrdersById(@PathVariable Integer orderId) {
-    List<Order> orders = orderService.retrieveOrdersById(orderId);
+    List<OrderJoinOrderDetail> orders = orderService.retrieveOrdersById(orderId);
     if (!orders.isEmpty()) {
       return ResponseEntity.ok(orders);
     } else {
