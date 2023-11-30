@@ -41,3 +41,21 @@ jobs:
           DBPASSWORD: ${{ secrets.DBPASSWORD }}
           GMAPSAPIKEY: ${{ secrets.GMAPSAPIKEY }}
           TOKENSECRETKEY: ${{ secrets.TOKENSECRETKEY }}
+
+
+  codeql-analysis:
+    needs: setup-build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
