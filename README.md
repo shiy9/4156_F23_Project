@@ -24,20 +24,23 @@ corner of the IDE, which will start running the server at `http://localhost:8001
   - Alternatively, right click on `ims/src/main/java/com/ims/ImsApplication.java` and click the run button.
 
 ## Testing
-- Unit tests are in `ims/src/test/java/com/ims/`
+- All tests are in `ims/src/test/java/com/ims/`
 - To run all tests, in the IntelliJ IDE, right click on `ims/src/test/java/com/ims/` and click `Run Tests in ims`. This will currently give a nicer interface than the method below, although the command can be configured in later iterations.
   - Or, `cd` into the `ims` directory, and run `mvn test` in the terminal. (We need to `cd` into the directory 
     where the Maven configuration file `pom.xml` resides, or the command will fail.)
   - Since the `TokenUtil` class relies on environment variables, the environment variables 
     listed in the [above section](#getting-started) also needs to be added to the unit tests run configuration.
-### Internal Integration Tests
-- In the case of our project, the "unit tests" are directly calling the APIs and 
-testing their outputs instead of testing individual functions as traditional unit tests do, 
-which effectively make them meet the requirements of "internal integration tests".
-Testing individual functions were not considered necessary in the case our application 
-considering the hierarchy of Java Spring application.
-- Internal integration tests for the APIs include `ClientControllerTests.java`, 
-  `ItemControllerTests.java`, and `OrderControllerTests.java`
+### Unit Tests
+- Unit tests include `ClientUnitTests` and `OrderUnitTests`
+- These classes essentially tests individual functions in different service implementations.
+- When it comes to functions interacting with the database, a mock if provided. However, certain 
+ functions such as inserting into the database (functions directly calling a 
+  Mapper function) are not tested as these are rather trivial.
+### Internal Integration Tests and API System Tests
+- Internal integration tests and API System Tests for the APIs include `ClientControllerTests.
+  java`, `ItemControllerTests.java`, and `OrderControllerTests.java`. These classes fully tests 
+  all the API endpoints with all possible return codes/values by making API calls. See the files 
+  for more details.
 ### External Integration Tests
 - The primary usage of third-party libraries in this project include the JWT library used in 
   `TokenUtil` class and the Google Maps library used when retrieving item details within 50 
@@ -72,6 +75,10 @@ considering the hierarchy of Java Spring application.
         "clientType": "retail" 
       }
     ```
+    - `email` has to be in the format of `xxx@xxx.xx`. Number of character after `.` should be 
+      in range of [2, 4]
+    - `password` has to be at least 8 characters long and contains at least 1 letter and 1 digit.
+      No special characters allowed.
     - `clientType` will only accept `"retail"` or `"warehouse"`. 
       - `"retail"` represents typical retail stores that sells items to customers.
       - `"warehouse"` represents warehouse stores like the Home Depot that both sells and rents 
