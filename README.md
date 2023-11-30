@@ -31,11 +31,18 @@ corner of the IDE, which will start running the server at `http://localhost:8001
   - Since the `TokenUtil` class relies on environment variables, the environment variables 
     listed in the [above section](#getting-started) also needs to be added to the unit tests run configuration.
 ### Unit Tests
-- Unit tests include `ClientUnitTests` and `OrderUnitTests`
-- These classes essentially tests individual functions in different service implementations.
-- When it comes to functions interacting with the database, a mock if provided. However, certain 
- functions such as inserting into the database (functions directly calling a 
-  Mapper function) are not tested as these are rather trivial.
+- `ClientUnitTests`
+  - This class tests individual functions in `ClientServiceImpl` which are used by 
+    Client-related endpoints.
+  - When it comes to functions interacting with the database, a mock is provided for functions 
+    such as `clientExist()`. However, unit tests are not done for functions such as inserting 
+    into the database (functions directly calling a Mapper function) since these are rather 
+    trivial. A mock provides little to no value and these functions are instead tested in the 
+    API systems tests.
+- `OrderUnitTests` (not required)
+  - All functions in `OrderServiceImpl` are functions directly calling a Mapper function 
+    (database query) and thus are not tested for the same reason above. Order-related tests are 
+    performed at the API level.
 ### Internal Integration Tests and API System Tests
 - Internal integration tests and API System Tests for the APIs include `ClientControllerTests.
   java`, `ItemControllerTests.java`, and `OrderControllerTests.java`. These classes fully tests 
