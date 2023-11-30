@@ -34,4 +34,10 @@ jobs:
           TOKENSECRETKEY: ${{ secrets.TOKENSECRETKEY }}
 
       - name: Run Unit tests & Integration tests
-        run: mvn test
+        run: mvn -B test --file ims/pom.xml
+        env:
+          DBLINK: ${{ secrets.DBLINK }}
+          DBUSERNAME: ${{ secrets.DBUSERNAME }}
+          DBPASSWORD: ${{ secrets.DBPASSWORD }}
+          GMAPSAPIKEY: ${{ secrets.GMAPSAPIKEY }}
+          TOKENSECRETKEY: ${{ secrets.TOKENSECRETKEY }}
