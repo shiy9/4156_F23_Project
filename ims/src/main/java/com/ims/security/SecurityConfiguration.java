@@ -27,7 +27,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .permitAll()
             .anyRequest().authenticated()
             .and()
-            .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
+            .cors();
   }
 }
 
