@@ -59,6 +59,21 @@ considering the hierarchy of Java Spring application.
 - See [API documentation](#api-endpoints) below on the specific API endpoints provided by our 
   service related to how to manage inventory Items and Orders.
 
+## Continuous Integration
+We are using GitHub Actions for CI. The workflow file is located at 
+  `.github/workflows/pipelines.yml`. The workflow is triggered on every push to the `main` branch. It 
+has three functionalities:
+- Build and run tests. This job will run `mvn build` and `mvn test` to build the project and run all 
+  tests. If any test fails, the job will fail and the workflow will stop.
+- Run branch coverage. This job will run `mvn verify` and use `actions/upload-artifact@v2` to generate a branch coverage report 
+  and upload it as an artifact. The report can be found in the "Actions" tab of the repo. 
+  Click on the latest workflow run, and click on the "branch coverage" link to download the report.
+- Run static bug analysis. We use CodeQL to run static bug analysis on the project. The job will 
+  run `actions/checkout@v4` to checkout the project, and use `github/codeql-action` to run the analysis. The analysis results can 
+  be found in the "Security" tab under the "Code Scanning" section. It will show the detected security
+  vulnerability and bug in the code.
+
+
 ## API Endpoints
 ### Client-related
 `/client/register`
