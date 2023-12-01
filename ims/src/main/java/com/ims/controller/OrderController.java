@@ -4,6 +4,7 @@ import com.ims.constants.ItemMessages;
 import com.ims.constants.OrderMessages;
 import com.ims.entity.Order;
 import com.ims.entity.OrderDetail;
+import com.ims.entity.OrderJoinOrderDetail;
 import com.ims.service.ItemManagementService;
 import com.ims.service.OrderService;
 import java.util.List;
@@ -14,21 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller to handle order-related endpoints.
  */
 @RestController
 @RequestMapping("/order")
+@CrossOrigin
 public class OrderController {
 
   @Autowired
@@ -62,8 +56,6 @@ public class OrderController {
     return ResponseEntity.ok(OrderMessages.ORDER_DELETE_SUCCESS);
   }
 
-  @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
-          + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @ExceptionHandler(NoSuchElementException.class)
   public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(OrderMessages.ORDER_INVALID_ID);
@@ -98,7 +90,7 @@ public class OrderController {
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @GetMapping("/retrieve/order/{orderId}")
   public ResponseEntity<?> retrieveOrdersById(@PathVariable Integer orderId) {
-    List<Order> orders = orderService.retrieveOrdersById(orderId);
+    List<OrderJoinOrderDetail> orders = orderService.retrieveOrdersById(orderId);
     if (!orders.isEmpty()) {
       return ResponseEntity.ok(orders);
     } else {

@@ -28,5 +28,7 @@ public final class ItemMessages {
 
   public static final String BARCODE_GENERATION_FAILURE = "Barcode generation failed";
 
+  public static final String BARCODE_GENERATION_ERROR = "Error occurred during Barcode generation";
+
   public static final String OUT_OF_CURRENT_STOCK_LEVEL = "Out of current stock level";
 }

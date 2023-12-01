@@ -1,6 +1,7 @@
 package com.ims.mapper;
 
 import com.ims.entity.Order;
+import com.ims.entity.OrderJoinOrderDetail;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -18,5 +19,5 @@ public interface OrderMapper {
 
   List<Order> retrieveOrdersByClientId(Integer clientId);
 
-  List<Order> retrieveOrdersById(Integer orderId);
+  List<OrderJoinOrderDetail> retrieveOrdersById(Integer orderId);
 }

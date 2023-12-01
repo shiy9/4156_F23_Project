@@ -2,6 +2,7 @@ package com.ims.service.impl;
 
 import com.ims.entity.Order;
 import com.ims.entity.OrderDetail;
+import com.ims.entity.OrderJoinOrderDetail;
 import com.ims.mapper.OrderDetailMapper;
 import com.ims.mapper.OrderMapper;
 import com.ims.service.OrderService;
@@ -43,7 +44,7 @@ public class OrderManagementServiceImpl implements OrderService {
   }
 
   @Override
-  public List<Order> retrieveOrdersById(Integer orderId) {
+  public List<OrderJoinOrderDetail> retrieveOrdersById(Integer orderId) {
     return orderMapper.retrieveOrdersById(orderId);
   }
 

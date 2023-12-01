@@ -1,6 +1,7 @@
 package com.ims;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -9,6 +10,7 @@ import com.ims.constants.OrderMessages;
 import com.ims.controller.OrderController;
 import com.ims.entity.Order;
 import com.ims.entity.OrderDetail;
+import com.ims.entity.OrderJoinOrderDetail;
 import com.ims.service.ItemManagementService;
 import com.ims.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,12 +59,13 @@ public class OrderControllerTests {
 
   @Test
   public void createOrderTest() throws Exception {
-    String orderJson = "{ \"clientId\": 1, \"itemId\": 101, \"type\": \"cake\", \"orderStatus\": \"PENDING\" }";
+    String orderJson = "{ \"clientId\": 1, \"itemId\": 101, \"type\": \"buy\", \"orderStatus\": " +
+            "\"PENDING\" }";
     doNothing().when(orderService).createOrder(any());
 
     mockMvc.perform(MockMvcRequestBuilders.post("/order/create")
-            .contentType("application/json")
-            .content(orderJson))
+                    .contentType("application/json")
+                    .content(orderJson))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().string(OrderMessages.ORDER_CREATE_SUCCESS));
   }
@@ -72,14 +75,14 @@ public class OrderControllerTests {
     Order mockOrder = new Order();
     mockOrder.setOrderId(1);
     mockOrder.setClientId(1);
-    mockOrder.setType("cake");
+    mockOrder.setType("buy");
     mockOrder.setOrderStatus("PENDING");
 
     List<Order> mockOrders = Collections.singletonList(mockOrder);
     when(orderService.retrieveOrdersByClientId(1)).thenReturn(mockOrders);
 
     mockMvc.perform(MockMvcRequestBuilders.get("/order/retrieve/client/1")
-            .contentType("application/json"))
+                    .contentType("application/json"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].orderId").value(1))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].clientId").value(1))
@@ -87,15 +90,26 @@ public class OrderControllerTests {
   }
 
   @Test
-  public void retrieveOrdersByOrderIdTest() throws Exception {
-    Order mockOrder = new Order();
-    mockOrder.setOrderId(3);
-    mockOrder.setClientId(5);
-    mockOrder.setType("table");
-    mockOrder.setOrderStatus("PENDING");
+  public void retrieveOrdersByClientIdTestEmpty() throws Exception {
+    List<Order> mockOrders = Collections.emptyList();
+    when(orderService.retrieveOrdersByClientId(anyInt())).thenReturn(mockOrders);
 
-    List<Order> mockOrders = Collections.singletonList(mockOrder);
-    when(orderService.retrieveOrdersById(3)).thenReturn(mockOrders);
+    mockMvc.perform(MockMvcRequestBuilders.get("/order/retrieve/client/1")
+                    .contentType("application/json"))
+            .andExpect(MockMvcResultMatchers.status().isNotFound())
+            .andExpect(MockMvcResultMatchers.content().string(OrderMessages.ORDER_RETRIEVE_FAILURE_CLIENT));
+  }
+
+  @Test
+  public void retrieveOrdersByOrderIdTest() throws Exception {
+    OrderJoinOrderDetail mockOrderJoinOrderDetail = new OrderJoinOrderDetail();
+    mockOrderJoinOrderDetail.setOrderId(3);
+    mockOrderJoinOrderDetail.setClientId(5);
+    mockOrderJoinOrderDetail.setType("table");
+    mockOrderJoinOrderDetail.setOrderStatus("PENDING");
+
+    List<OrderJoinOrderDetail> mockOrderJoinOrderDetails = Collections.singletonList(mockOrderJoinOrderDetail);
+    when(orderService.retrieveOrdersById(3)).thenReturn(mockOrderJoinOrderDetails);
 
     mockMvc.perform(MockMvcRequestBuilders.get("/order/retrieve/order/3")
                     .contentType("application/json"))
@@ -114,8 +128,8 @@ public class OrderControllerTests {
     doNothing().when(orderService).updateOrder(any());
 
     mockMvc.perform(MockMvcRequestBuilders.put("/order/update")
-            .contentType("application/json")
-            .content(updatedOrderJson))
+                    .contentType("application/json")
+                    .content(updatedOrderJson))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().string(OrderMessages.ORDER_UPDATE_SUCCESS));
   }
@@ -140,6 +154,18 @@ public class OrderControllerTests {
                     .content(orderDetailJson))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().string(OrderMessages.ORDER_DETAIL_CREATE_SUCCESS));
+  }
+
+  @Test
+  public void createOrderDetailTestBad() throws Exception {
+    String orderDetailJson = "{\"orderId\": 1, \"itemId\": 1, \"quantity\": 2, \"amount\": 150.0 }";
+    when(itemManagementService.decreaseItem(any())).thenReturn(ItemMessages.UPDATE_FAILURE);
+
+    mockMvc.perform(MockMvcRequestBuilders.post("/order/detail/create")
+                    .contentType("application/json")
+                    .content(orderDetailJson))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.content().string(ItemMessages.UPDATE_FAILURE));
   }
 
   @Test
@@ -174,6 +200,15 @@ public class OrderControllerTests {
   }
 
   @Test
+  public void retrieveOrderDetailByItemIdTestBad() throws Exception {
+    List<OrderDetail> mockOrderDetails = Collections.emptyList();
+    when(orderService.retrieveOrderDetailByItemId(101)).thenReturn(mockOrderDetails);
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/order/detail/retrieve/item_id/101"))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
+  }
+
+  @Test
   public void retrieveOrderDetailByOrderIdTest() throws Exception {
     OrderDetail mockOrderDetail = new OrderDetail();
     mockOrderDetail.setOrderId(2);
@@ -192,6 +227,15 @@ public class OrderControllerTests {
   }
 
   @Test
+  public void retrieveOrderDetailByOrderIdTestBad() throws Exception {
+    List<OrderDetail> mockOrderDetails = Collections.emptyList();
+    when(orderService.retrieveOrderDetailByOrderId(anyInt())).thenReturn(mockOrderDetails);
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/order/detail/retrieve/order_id/2"))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
+  }
+
+  @Test
   public void deleteOrderDetailTest() throws Exception {
     doNothing().when(orderService).deleteOrderDetail(1);
 
@@ -199,11 +243,9 @@ public class OrderControllerTests {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().string(OrderMessages.ORDER_DETAIL_DELETE_SUCCESS));
   }
+
   @Test
   public void returnAlertTest() throws Exception {
-//    String dateString = "2023-11-29";
-//    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//    Date date = dateFormat.parse(dateString);
     Date date = new Date();
     OrderDetail mockOrderDetail = new OrderDetail();
     mockOrderDetail.setOrderId(2);
@@ -221,6 +263,15 @@ public class OrderControllerTests {
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].quantity").value(200))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].amount").value(2.0))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].dueDate").value(date));
+  }
+
+  @Test
+  public void returnAlertTestBad() throws Exception {
+    List<OrderDetail> mockOrderDetails = Collections.emptyList();
+    when(orderService.getReturnAlertItem()).thenReturn(mockOrderDetails);
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/order/returnAlert"))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 
   @Test
@@ -246,7 +297,14 @@ public class OrderControllerTests {
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].dueDate").value(date));
   }
 
+  @Test
+  public void expirationAlertTestBad() throws Exception {
+    List<OrderDetail> mockOrderDetails = Collections.emptyList();
+    when(orderService.getExpirationAlertItem()).thenReturn(mockOrderDetails);
 
+    mockMvc.perform(MockMvcRequestBuilders.get("/order/expirationAlert"))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
+  }
 
 }
 

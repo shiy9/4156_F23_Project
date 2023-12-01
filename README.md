@@ -23,21 +23,47 @@ file (`pom.xml`) and prompt to configure Maven at the bottom right corner. Click
 corner of the IDE, which will start running the server at `http://localhost:8001`.
   - Alternatively, right click on `ims/src/main/java/com/ims/ImsApplication.java` and click the run button.
 
+## Example Client Application
+- **The client application is located in **_[this repository](https://github.com/YangziXinJas/coms4156-front-end)_****
+- `git clone` the above repository, then run te development server
+  ```bash
+  npm run dev
+  # or
+  yarn dev
+  # or
+  pnpm dev
+  # or
+  bun dev
+  ```
+  - Note that this does require you to have certain dependencies installed on the machine. (For 
+    example, for `npm`, Node.js needs to be installed).
+- Open [http://localhost:3000](http://localhost:3000) with your browser to see the result. 
+
 ## Testing
-- Unit tests are in `ims/src/test/java/com/ims/`
+- All tests are in `ims/src/test/java/com/ims/`
 - To run all tests, in the IntelliJ IDE, right click on `ims/src/test/java/com/ims/` and click `Run Tests in ims`. This will currently give a nicer interface than the method below, although the command can be configured in later iterations.
   - Or, `cd` into the `ims` directory, and run `mvn test` in the terminal. (We need to `cd` into the directory 
     where the Maven configuration file `pom.xml` resides, or the command will fail.)
   - Since the `TokenUtil` class relies on environment variables, the environment variables 
     listed in the [above section](#getting-started) also needs to be added to the unit tests run configuration.
-### Internal Integration Tests
-- In the case of our project, the "unit tests" are directly calling the APIs and 
-testing their outputs instead of testing individual functions as traditional unit tests do, 
-which effectively make them meet the requirements of "internal integration tests".
-Testing individual functions were not considered necessary in the case our application 
-considering the hierarchy of Java Spring application.
-- Internal integration tests for the APIs include `ClientControllerTests.java`, 
-  `ItemControllerTests.java`, and `OrderControllerTests.java`
+### Unit Tests
+- `ClientUnitTests`
+  - This class tests individual functions in `ClientServiceImpl` which are used by 
+    Client-related endpoints.
+  - When it comes to functions interacting with the database, a mock is provided for functions 
+    such as `clientExist()`. However, unit tests are not done for functions such as inserting 
+    into the database (functions directly calling a Mapper function) since these are rather 
+    trivial. A mock provides little to no value and these functions are instead tested in the 
+    API systems tests.
+- `OrderUnitTests` (not required)
+  - All functions in `OrderServiceImpl` are functions directly calling a Mapper function 
+    (database query) and thus are not tested for the same reason above. Order-related tests are 
+    performed at the API level.
+### Internal Integration Tests and API System Tests
+- Internal integration tests and API System Tests for the APIs include `ClientControllerTests.
+  java`, `ItemControllerTests.java`, and `OrderControllerTests.java`. These classes fully tests 
+  all the API endpoints with all possible return codes/values by making API calls. See the files 
+  for more details.
 ### External Integration Tests
 - The primary usage of third-party libraries in this project include the JWT library used in 
   `TokenUtil` class and the Google Maps library used when retrieving item details within 50 
@@ -87,7 +113,11 @@ has three functionalities:
         "clientType": "retail" 
       }
     ```
-    - `clientType` will only accept `"retail"` or `"warehouse"`. 
+    - `email` has to be in the format of `xxx@xxx.xx`. Number of character after `.` should be 
+      in range of [2, 4] (inclusive)
+    - `password` has to be at least 8 characters long and contains at least 1 letter and 1 digit.
+      No special characters allowed.
+    - `clientType` can only be `"retail"` or `"warehouse"`. 
       - `"retail"` represents typical retail stores that sells items to customers.
       - `"warehouse"` represents warehouse stores like the Home Depot that both sells and rents 
         items to customers.
@@ -97,7 +127,7 @@ has three functionalities:
 - **Expected Response**:
   - Response body is a message indicating whether the request succeeded or failed.
   - Response codes:
-    - `201`: registration successful, and user is logged into the database
+    - `201`: registration successful, and client is logged into the database
     - `400`: registration failed (maybe due to email already in-use, invalid email and password formats. See response body for more information)
 
 `/client/login`
@@ -112,7 +142,7 @@ has three functionalities:
         "clientId": <clientId>
       }
       ```
-    - The response body will NOT contain a token if login was not successful.
+    - The response body will NOT contain a `token` or a `clientId` if login was not successful.
   - Response codes:
     - `200`: login success
     - `401`: login failed, password mismatch
@@ -125,7 +155,7 @@ has three functionalities:
 
 ### Side note: how to use token and expected token behavior
 - Client-related endpoints do NOT require a token, since they are responsible for registration 
-  and generating the token.
+  and generating the token in the first place.
 - For all Order-related and Item-related requests, the token acquired from `/client/login` will need
   to be included in the header as a Bearer token (i.e. in the `Authorization` header field, the 
   value needs to be `Bearer <token>`). Note that the `Bearer` and space is necessary, else the 
@@ -140,6 +170,17 @@ has three functionalities:
   a `401` unauthorized code will also be thrown with a message saying "Not authorized to use 
   this endpoint.". More implementation details [here](#details-of-token-related-implementation).
 
+#### Distinguishing different clients
+- Again, the client login on the service-end is stateless. However, since each client login is 
+  granted a token and the client's information such as their email and type are encoded within 
+  the token, our service can distinguish between different client entities by simply decoding 
+  the token. 
+- As for the same individual/company/store, logging into the same account on different machines or 
+  even browsers, each token will also carry an expiration time. If the login time differs, then we
+  can still distinguish between different logins made by the same client. Even if the login 
+  times are exactly the same, the service can still make the correct update to the client's 
+  information without any conflicts.
+
 
 &nbsp;
 <br>
@@ -149,16 +190,32 @@ has three functionalities:
 #### **Create an Order**
 `/order/create`
 - **Method**: POST
-- **Request Body**: JSON containing order details (orderId, userId, type, orderDate, orderStatus)
+- **Request Body**: JSON containing order details (clientId, type, orderDate, orderStatus)
+  ```json
+  {
+    "clientId": 1,
+    "type": "rent",
+    "orderDate": "2023-10-24T00:00:00",
+    "orderStatus": "In progress"
+  }
+  ```
+    - `clientId`: the logged-in client who is recording this order. Note that this will be known 
+      after successul login
+    - `type`: the type of the order. It can either be "buy" or "rent" depends on the client type.
+    - `orderDate`: date the order needs to be recorded in ISO 8610 format like shown above.
+    - `orderStatus`: can either be "In progress", "Overdue", or "Complete".
 - **Expected Response**:
   - `200`: Order Created Successfully
+  - `500`: Order creation error
 
 #### **Update an Order**
 `/order/update`
 - **Method**: PUT
-- **Request Body**: JSON containing order details to be updated (orderId must be present)
+- **Request Body**: JSON containing order details to be updated (orderId must be present), rest 
+  of the fields are the same as in `/order/create`
 - **Expected Response**:
   - `200`: Order Updated Successfully
+  - `404`: No such order exists
 
 #### **Delete an Order**
 `/order/delete/{orderId}`
@@ -166,21 +223,85 @@ has three functionalities:
 - **Request Body**:  {orderId} - The ID of the order to be deleted
 - **Expected Response**:
   - `200`: Order Deleted Successfully
+  - `404`: No such order exists
 
-#### **Retrieve Orders by User ID**
-`/order/retrieve/user/{userId}`
+#### **Retrieve Orders by Client ID**
+`/order/retrieve/client/{clientId}`
 - **Method**: GET
-- **Request Body**:  {userId} - The ID of the user to retrieve orders for
+- **Request Body**:  {clientId} - The ID of the client to retrieve orders for
 - **Expected Response**:
-  - - `200`: List of orders associated with the provided user ID
-    - `404`: No orders found for the provided user ID
+  - - `200`: List of orders associated with the provided client ID
+    - `404`: No orders found for the provided client ID
+
+#### **Retrieve Order by Order ID**
+`/order/retrieve/order/{orderId}`
+- **Method**: GET
+- **Request Body**:  {orderId} - The ID of the order to retrieve for
+- **Expected Response**:
+  - - `200`: List of one order associated with the provided order ID
+  - `404`: No orders found for the provided order ID
+
+#### **Create an Order Detail**
+`/order/detail/create`
+- **Method**: POST
+- **Request Body**: JSON containing order details information
+  ```json
+  {
+    "orderId": 1,
+    "itemId": 1,
+    "quantity": 50,
+    "amount": 100.5,
+    "dueDate": "2023-10-24T00:00:00"
+  }
+  ```
+  - `orderId`: the associated orderId of this OrderDetail
+  - `itemId`: the associated itemId of this OrderDetail
+  - `quantity`: how many are in the order
+  - `amount`: the price of the order.
+  - `dueDate`: the due date if it is a rental order. Also in ISO 8610 format.
+- **Expected Response**:
+  - `200`: Order Detail Created Successfully
+  - `401`: Order Detail creation error
+
+#### **Update an Order Detail**
+`/order/detail/update`
+- **Method**: PUT
+- **Request Body**: JSON containing order details to be updated (orderId must be present), rest
+  of the fields are the same as in `/order/detail/create`
+- **Expected Response**:
+  - `200`: Order Updated Successfully
+  - `404`: No such order exists
+
+#### **Delete an Order Detail**
+`/order/detail/delete/{orderId}`
+- **Method**: POST
+- **Request Body**:  {orderId} - The ID of the order associated with the Order Detail to be deleted
+- **Expected Response**:
+  - `200`: Order Detail Deleted Successfully
+  - `404`: No such order exists
+
+#### **Retrieve Order Detail by Order ID**
+`/order/detail/retrieve/order_id/{orderId}`
+- **Method**: GET
+- **Request Body**:  {orderId} - The ID of the order to retrieve for
+- **Expected Response**:
+  - - `200`: List of one order detail associated with the provided order ID
+  - `404`: No orders found for the provided order ID
+
+#### **Retrieve Order Detail by Item ID**
+`/order/detail/retrieve/item_id/{itemId}`
+- **Method**: GET
+- **Request Body**:  {itemId} - The ID of the item to retrieve order details for
+- **Expected Response**:
+  - `200`: List of order detail associated with the provided item ID
+  - `404`: No orders found for the provided item ID
 
 #### **Return Alert**
 `/order/returnAlert`
 - **Method**: GET
 - **Request Body**:  None
 - **Expected Response**:
-  - - `200`: List of items about to expire
+  - - `200`: List of items about to be past rental due within the next two days
     - `404`: No items found that are about to expire
 
 #### **Expiration Alert**
