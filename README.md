@@ -25,19 +25,8 @@ corner of the IDE, which will start running the server at `http://localhost:8001
 
 ## Example Client Application
 - **The client application is located in **_[this repository](https://github.com/YangziXinJas/coms4156-front-end)_****
-- `git clone` the above repository, then run te development server
-  ```bash
-  npm run dev
-  # or
-  yarn dev
-  # or
-  pnpm dev
-  # or
-  bun dev
-  ```
-  - Note that this does require you to have certain dependencies installed on the machine. (For 
-    example, for `npm`, Node.js needs to be installed).
-- Open [http://localhost:3000](http://localhost:3000) with your browser to see the result. 
+- Follow steps listed in the README of above repository to start running the example client 
+  application.
 
 ## Testing
 - All tests are in `ims/src/test/java/com/ims/`
