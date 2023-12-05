@@ -48,6 +48,8 @@ corner of the IDE, which will start running the server at `http://localhost:8001
   - All functions in `OrderServiceImpl` are functions directly calling a Mapper function 
     (database query) and thus are not tested for the same reason above. Order-related tests are 
     performed at the API level.
+- `ItemManagementServiceUnitTests`
+  - This class tests all functions provided by the ItemManagementService. 
 ### Internal Integration Tests and API System Tests
 - Internal integration tests and API System Tests for the APIs include `ClientControllerTests.
   java`, `ItemControllerTests.java`, and `OrderControllerTests.java`. These classes fully tests 
@@ -76,17 +78,33 @@ corner of the IDE, which will start running the server at `http://localhost:8001
 
 ## Continuous Integration
 We are using GitHub Actions for CI. The workflow file is located at 
-  `.github/workflows/pipelines.yml`. The workflow is triggered on every push to the `main` branch. It 
+  `.github/workflows/pipelines.yml`. The workflow is triggered on every push to the `main` 
+branch, and the CI report can be found along-side every commit in the comit history. It 
 has three functionalities:
-- Build and run tests. This job will run `mvn build` and `mvn test` to build the project and run all 
+- Build and run all unit tests, internal integration tests, external integration tests, and API 
+  system tests. This job will run `mvn build` and `mvn test` to build the project and run all 
   tests. If any test fails, the job will fail and the workflow will stop.
 - Run branch coverage. This job will run `mvn verify` and use `actions/upload-artifact@v2` to generate a branch coverage report 
   and upload it as an artifact. The report can be found in the "Actions" tab of the repo. 
-  Click on the latest workflow run, and click on the "branch coverage" link to download the report.
+  Click on the latest workflow run, scroll down from the "Summary" tab, the Jacoco report will be
+  under the "Artifacts" section. Download the zip file and unzip to view the report at `index.html`.
+  - At the time of this commit, the branch coverage is about 31%. We believe there can be some 
+    configuration issue with the current branch coverage tool as our unit tests as well as 
+    system tests covers all branches in the code.
+  - Some "elements" that have a high impact in the score include `com.ims.entity`, which only 
+    contains declaration files for entities reflecting that stored in our database, yet the tool 
+    reports we have 0% coverage on the branches while the code does not really contain any 
+    branches.
+  - Another reason may be that since we are using Mapper functions to query our database, the 
+    tool is not able to comprehend that we are invoking the SQL queries and think we have not 
+    used the function at all.
 - Run static bug analysis. We use CodeQL to run static bug analysis on the project. The job will 
-  run `actions/checkout@v4` to checkout the project, and use `github/codeql-action` to run the analysis. The analysis results can 
-  be found in the "Security" tab under the "Code Scanning" section. It will show the detected security
-  vulnerability and bug in the code.
+  run `actions/checkout@v4` to checkout the project, and use `github/codeql-action` to run the 
+  analysis. The analysis report can be found in the "Security" tab under the "Code Scanning" 
+  section. It will show the detected security vulnerability and bug in the code.
+  - At the time of this commit, there is only one security vulnerability regarding disabled 
+    Spring CSRF protection. The team decided to not fix it since we are using custom JWT token 
+    to perform authentication and disabling this is necessary. 
 
 
 ## API Endpoints
