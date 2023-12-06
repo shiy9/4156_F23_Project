@@ -491,9 +491,10 @@ adding the difference of quantityAtLocation to the current_stock_level.
 - We are using the CheckStyle plugin on IntelliJ to check for potential style warning/errors.
 - To replicate the style checker, install the CheckStyle-IDEA plugin in IntelliJ. Then go to 
   Settings -> Tools -> Checkstyle, and select Google Checks. 
-- You can now find the style checker at the bottom toolbar of IntelliJ and can run it at the 
+- You can now find the Checkstyle tool at the bottom toolbar of IntelliJ and can run it at the 
   current file, the current module, or the entire project. 
-- The report included in the repo is for the entire project.
+- The report is included in the repo under `reports/`, and it is a screenshot generated after 
+  clicking the "Check Project" button in the Checkstyle tool.
 
 ## References
 ### Resources used when implementing JWT token
