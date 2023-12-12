@@ -151,7 +151,7 @@ public class OrderController {
    */
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
-  @DeleteMapping("/detail/delete/{orderId}")
+  @PostMapping("/detail/delete/{orderId}")
   public ResponseEntity<String> deleteOrderDetail(@PathVariable Integer orderId) {
     orderService.deleteOrderDetail(orderId);
     return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_DELETE_SUCCESS);

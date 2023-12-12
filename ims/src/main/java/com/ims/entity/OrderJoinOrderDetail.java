@@ -10,6 +10,7 @@ import lombok.Data;
 public class OrderJoinOrderDetail {
   private Integer orderId;
   private Integer itemId;
+  private Integer locationID;
   private Integer quantity;
   private Double amount;
   private Date dueDate; // only if type is "rent"

@@ -6,35 +6,38 @@
     <resultMap id="orderDetailMap" type="OrderDetail">
         <id property="orderId" column="order_id"/>
         <result property="itemId" column="item_id"/>
+        <result property="locationId" column="location_id"/>
         <result property="quantity" column="quantity"/>
         <result property="amount" column="amount"/>
         <result property="dueDate" column="due_date"/>
     </resultMap>
 
     <select id="retrieveOrderDetailByOrderId" resultMap="orderDetailMap">
-        SELECT order_id, item_id, quantity, amount, due_date
+        SELECT order_id, item_id, location_id, quantity, amount, due_date
         FROM OrderDetail
         WHERE order_id = #{orderId}
     </select>
 
 
     <select id="retrieveOrderDetailByItemId" resultMap="orderDetailMap">
-        SELECT order_id, item_id, quantity, amount, due_date
+        SELECT order_id, item_id, location_id, quantity, amount, due_date
         FROM OrderDetail
         WHERE item_id = #{itemId}
     </select>
 
     <insert id="insert" parameterType="OrderDetail" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">
-        INSERT INTO OrderDetail (order_id, item_id, quantity, amount, due_date)
-        VALUES (#{orderId}, #{itemId}, #{quantity}, #{amount}, #{dueDate})
+        INSERT INTO OrderDetail (order_id, item_id, location_id, quantity, amount, due_date)
+        VALUES (#{orderId}, #{itemId}, #{locationId}, #{quantity}, #{amount}, #{dueDate})
     </insert>
 
     <update id="update" parameterType="OrderDetail">
-        SET item_id = #{itemId}, quantity = #{quantity}, amount = #{amount}, due_date = #{dueDate}
         UPDATE OrderDetail
         <set>
             <if test="itemId != null">
                 item_id = #{itemId},
+            </if>
+            <if test="locationId != null">
+                location_id = #{locationId},
             </if>
             <if test="quantity != null">
                 quantity = #{quantity},
@@ -42,7 +45,7 @@
             <if test="amount != null">
                 amount = #{amount},
             </if>
-            <if test="due_date != null">
+            <if test="dueDate != null">
                 due_date = #{dueDate},
             </if>
         </set>
