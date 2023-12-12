@@ -27,7 +27,7 @@
 
     <insert id="insert" parameterType="Item" useGeneratedKeys="true" keyProperty="itemId" keyColumn="item_id">
         INSERT INTO Items (item_id, client_id, name, current_stock_level, description, price, barcode)
-        VALUES (#{itemId}, #{clientId}, #{name}, #{currentStockLevel}, #{description}, #{price}, #{barcode})
+        VALUES (#{itemId}, #{clientId}, #{name}, 0, #{description}, #{price}, #{barcode})
     </insert>
 
     <update id="update" parameterType="Item">
