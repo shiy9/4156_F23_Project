@@ -7,6 +7,8 @@ import com.ims.entity.OrderDetail;
 import com.ims.entity.OrderJoinOrderDetail;
 import com.ims.service.ItemManagementService;
 import com.ims.service.OrderService;
+
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +46,28 @@ public class OrderController {
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @PostMapping("/create")
-  public ResponseEntity<String> createOrder(@RequestBody Order order) {
+  public ResponseEntity<String> createOrder(@RequestBody OrderJoinOrderDetail orderJoinOrderDetail) {
+    Order order = new Order();
+    order.setClientId(orderJoinOrderDetail.getClientId());
+    order.setType(orderJoinOrderDetail.getType());
+    order.setOrderDate(orderJoinOrderDetail.getOrderDate());
+    order.setOrderStatus(orderJoinOrderDetail.getOrderStatus());
     orderService.createOrder(order);
-    return ResponseEntity.ok(OrderMessages.ORDER_CREATE_SUCCESS);
+    System.out.println(order.getOrderId());
+    OrderDetail orderDetail = new OrderDetail();
+    orderDetail.setOrderId(order.getOrderId());
+    orderDetail.setItemId(orderJoinOrderDetail.getItemId());
+    orderDetail.setLocationId(orderJoinOrderDetail.getLocationId());
+    orderDetail.setQuantity(orderJoinOrderDetail.getQuantity());
+    orderDetail.setAmount(orderJoinOrderDetail.getAmount());
+    orderDetail.setDueDate(orderJoinOrderDetail.getDueDate());
+    String result = itemManagementService.decreaseItem(orderDetail);
+    if (result.equals(ItemMessages.UPDATE_SUCCESS)) {
+      orderService.createOrderDetail(orderDetail);
+      return ResponseEntity.ok(OrderMessages.ORDER_CREATE_SUCCESS);
+    } else {
+      return ResponseEntity.badRequest().body(result);
+    }
   }
 
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
