@@ -10,7 +10,7 @@
         <result property="address1" column="address_1"/>
         <result property="address2" column="address_2"/>
         <result property="clientId" column="client_id"/>
-        <result property="zipCode" column="zip_code"/>
+        <result property="zipCode" column="zipcode"/>
         <result property="latitude" column="latitude"/>
         <result property="longitude" column="longitude"/>
     </resultMap>
