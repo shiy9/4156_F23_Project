@@ -330,8 +330,8 @@ has three functionalities:
   - `Required`: clientId, name, address1, zipCode
   - `Optional`: address2, locationType
 - **Expected Response**:
-  - `200`: Insert successful
-  - `400`: Insert failed
+  - `200`: The locationID of the newly created location
+  - `400`: -1 (Insert failed)
 
 `/location/get/{id}`
 - **Method**: GET
@@ -346,8 +346,8 @@ has three functionalities:
   - `Required`: clientId, name, price
   - `Optional`: description
 - **Expected Response**:
-  - `200`: Insert successful
-  - `400`: Insert failed
+  - `200`: The itemID of the newly created item
+  - `400`: -1 (Insert failed)
 - **Note**: The current_stock_level of the item will be set to 0 by default.
 
 `/item/get/{id}`

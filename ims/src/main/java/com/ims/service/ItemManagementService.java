@@ -12,7 +12,7 @@ import java.util.List;
 public interface ItemManagementService {
   Item getItemByItemId(Integer itemId);
 
-  String insertItem(Item item);
+  Integer insertItem(Item item);
 
   String updateItem(Item item);
 

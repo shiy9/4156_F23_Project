@@ -59,9 +59,9 @@ public class ItemController {
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @PostMapping("/location/create")
-  public ResponseEntity<String> createLocation(@RequestBody Location location) {
-    String result = locationService.insert(location);
-    if (result.equals(ItemMessages.INSERT_SUCCESS)) {
+  public ResponseEntity<Integer> createLocation(@RequestBody Location location) {
+    Integer result = locationService.insert(location);
+    if (!result.equals(-1)) {
       return ResponseEntity.ok(result);
     } else {
       // return the response entity with the error message in result
@@ -114,9 +114,9 @@ public class ItemController {
   @PreAuthorize("hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_WAREHOUSE) or "
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @PostMapping("/item/create")
-  public ResponseEntity<String> createItem(@RequestBody Item item) {
-    String result = itemManagementService.insertItem(item);
-    if (result.equals(ItemMessages.INSERT_SUCCESS)) {
+  public ResponseEntity<Integer> createItem(@RequestBody Item item) {
+    Integer result = itemManagementService.insertItem(item);
+    if (!result.equals(-1)) {
       return ResponseEntity.ok(result);
     } else {
       return ResponseEntity.badRequest().body(result);

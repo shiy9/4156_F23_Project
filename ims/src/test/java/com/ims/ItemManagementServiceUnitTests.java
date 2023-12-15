@@ -62,9 +62,9 @@ public class ItemManagementServiceUnitTests {
 
     when(itemMapper.insert(item)).thenReturn(1);
 
-    String result = itemManagementService.insertItem(item);
+    Integer result = itemManagementService.insertItem(item);
 
-    assertEquals(ItemMessages.INSERT_SUCCESS, result);
+    assertEquals(1, result);
   }
 
   @Test

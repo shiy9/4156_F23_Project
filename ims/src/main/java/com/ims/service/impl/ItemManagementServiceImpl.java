@@ -44,11 +44,11 @@ public class ItemManagementServiceImpl implements ItemManagementService {
   }
 
   @Override
-  public String insertItem(Item item) {
+  public Integer insertItem(Item item) {
     if (itemMapper.insert(item) > 0) {
-      return ItemMessages.INSERT_SUCCESS;
+      return item.getItemId();
     }
-    return ItemMessages.INSERT_FAILURE;
+    return -1;
   }
 
   @Override

@@ -34,18 +34,18 @@ public class LocationServiceImpl implements LocationService {
 
   @Override
   @Transactional
-  public String insert(Location location) {
+  public Integer insert(Location location) {
     String zipCode = location.getZipCode();
     Double[] coordinates = getCoordinates(zipCode);
     if (coordinates == null) {
-      return ItemMessages.INVALID_ZIP_CODE;
+      return -1;
     }
     location.setLatitude(coordinates[0]);
     location.setLongitude(coordinates[1]);
     if (locationMapper.insert(location) > 0) {
-      return ItemMessages.INSERT_SUCCESS;
+      return location.getLocationId();
     }
-    return ItemMessages.INSERT_FAILURE;
+    return -1;
   }
 
   /**

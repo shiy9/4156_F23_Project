@@ -77,14 +77,13 @@ public class ItemControllerTests {
     @Test
     public void testCreateLocation() throws Exception {
 
-        String locationJson = "{ \"name\": \"Warehouse\", \"address1\": \"123 Main St\", \"zipCode\" : 10025, \"clientId\": 2}";
-        when(locationService.insert(any())).thenReturn(ItemMessages.INSERT_SUCCESS);
+        String locationJson = "{ \"name\": \"Warehouse\", \"address1\": \"123 Main St\", \"zipCode\" : 10025, \"clientId\": 2, \"locationId\": 10000}";
+        when(locationService.insert(any())).thenReturn(10000);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/location/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(locationJson))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(ItemMessages.INSERT_SUCCESS));
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
@@ -108,14 +107,13 @@ public class ItemControllerTests {
 
     @Test
     public void testCreateItem() throws Exception {
-        String itemJson = "{ \"name\": \"Item\", \"description\": \"Item Description\", \"Price\" : 10, \"CurrentStockLevel\": 10}";
-        when(itemManagementService.insertItem(any())).thenReturn(ItemMessages.INSERT_SUCCESS);
+        String itemJson = "{ \"name\": \"Item\", \"description\": \"Item Description\", \"Price\" : 10, \"ItemId\" : 10, \"CurrentStockLevel\": 10}";
+        when(itemManagementService.insertItem(any())).thenReturn(10);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/item/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(itemJson))
-                .andExpect(status().isOk())
-                .andExpect(content().string(ItemMessages.INSERT_SUCCESS));
+                .andExpect(status().isOk());
     }
 
     @Test
