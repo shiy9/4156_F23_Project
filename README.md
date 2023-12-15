@@ -256,6 +256,7 @@ has three functionalities:
   {
     "orderId": 1,
     "itemId": 1,
+    "locationId": 1,
     "quantity": 50,
     "amount": 100.5,
     "dueDate": "2023-10-24T00:00:00"

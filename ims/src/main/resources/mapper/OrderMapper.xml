@@ -18,13 +18,14 @@
         <result property="orderDate" column="order_date"/>
         <result property="orderStatus" column="status"/>
         <result property="itemId" column="item_id"/>
+        <result property="locationId" column="location_id"/>
         <result property="quantity" column="quantity"/>
         <result property="amount" column="amount"/>
         <result property="dueDate" column="due_date"/>
     </resultMap>
 
     <select id="retrieveOrdersById" resultMap="orderJoinOrderDetailMap">
-        SELECT Orders.order_id, client_id, type, order_date, status, item_id, quantity, amount, due_date
+        SELECT Orders.order_id, client_id, type, order_date, status, item_id, location_id, quantity, amount, due_date
         FROM Orders
         JOIN OrderDetail ON Orders.order_id = OrderDetail.order_id
         WHERE Orders.order_id = #{orderId};
