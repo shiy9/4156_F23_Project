@@ -436,6 +436,14 @@ adding the difference of quantityAtLocation to the current_stock_level.
   - `200`: List of ItemLocations
   - `404`: Not Found
 
+`/itemLocation/getWithin50Miles/{itemId}/{locationId}`
+- **Method**: GET`
+- **Request Body**:  
+  {itemId} - The itemID of the item to retrieve  
+  {locationId} - The locationID of the location to retrieve
+  - `200`: List of ItemLocations within 50 miles
+  - `404`: Not Found
+
 ## Details of Token-related Implementation
 - All classes to support authentication at every endpoint using JWT token are in 
   `ims/src/main/java/com/ims/security/`.
