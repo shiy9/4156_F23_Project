@@ -59,8 +59,9 @@ public class OrderControllerTests {
 
   @Test
   public void createOrderTest() throws Exception {
-    String orderJson = "{ \"clientId\": 1, \"itemId\": 101, \"type\": \"buy\", \"orderStatus\": " +
-            "\"PENDING\" }";
+    String orderJson = "{ \"clientId\": 1, \"type\": \"buy\", \"orderStatus\": " +
+            "\"PENDING\", \"itemId\": 1, \"quantity\": 1, \"amount\": 100.5, \"locationId\": 1}";
+    when(itemManagementService.decreaseItem(any())).thenReturn(ItemMessages.UPDATE_SUCCESS);
     doNothing().when(orderService).createOrder(any());
 
     mockMvc.perform(MockMvcRequestBuilders.post("/order/create")
@@ -239,7 +240,7 @@ public class OrderControllerTests {
   public void deleteOrderDetailTest() throws Exception {
     doNothing().when(orderService).deleteOrderDetail(1);
 
-    mockMvc.perform(MockMvcRequestBuilders.delete("/order/detail/delete/1"))
+    mockMvc.perform(MockMvcRequestBuilders.post("/order/detail/delete/1"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().string(OrderMessages.ORDER_DETAIL_DELETE_SUCCESS));
   }
