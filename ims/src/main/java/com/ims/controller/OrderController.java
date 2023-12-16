@@ -66,6 +66,7 @@ public class OrderController {
       orderService.createOrderDetail(orderDetail);
       return ResponseEntity.ok(OrderMessages.ORDER_CREATE_SUCCESS);
     } else {
+      orderService.deleteOrder(order.getOrderId());
       return ResponseEntity.badRequest().body(result);
     }
   }
