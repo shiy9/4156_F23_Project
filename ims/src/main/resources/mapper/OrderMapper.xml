@@ -56,7 +56,7 @@
                 order_date = #{orderDate},
             </if>
             <if test="orderStatus != null">
-                order_status = #{orderStatus},
+                status = #{orderStatus},
             </if>
         </set>
         WHERE order_id = #{orderId}
