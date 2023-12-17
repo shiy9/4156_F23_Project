@@ -1,5 +1,6 @@
 package com.ims.mapper;
 
+import com.ims.entity.Order;
 import com.ims.entity.OrderDetail;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
@@ -22,5 +23,7 @@ public interface OrderDetailMapper {
   List<OrderDetail> getReturnAlertItem();
 
   List<OrderDetail> getExpirationAlertItem();
+
+  OrderDetail retrieveOrderDetailById(Integer orderId, Integer itemId, Integer locationId);
 
 }

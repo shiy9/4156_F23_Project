@@ -177,7 +177,18 @@ public class OrderControllerTests {
   @Test
   public void updateOrderDetailTest() throws Exception {
     String updatedOrderDetailJson =
-            "{ \"orderId\": 1, \"itemId\": 101, \"quantity\": 5, \"amount\": 150.0 }";
+            "{ \"orderId\": 1, \"itemId\": 101, \"locationId\": 1,\"quantity\": 5, \"amount\": 150.0 }";
+    ItemLocation mockItemLocation = new ItemLocation();
+    mockItemLocation.setItemId(101);
+    mockItemLocation.setLocationId(1);
+    mockItemLocation.setQuantityAtLocation(10);
+    OrderDetail mockOrderDetail = new OrderDetail();
+    mockOrderDetail.setOrderId(1);
+    mockOrderDetail.setItemId(101);
+    mockOrderDetail.setLocationId(1);
+    mockOrderDetail.setQuantity(10);
+    when(itemManagementService.getItemLocationById(101,1)).thenReturn(mockItemLocation);
+    when(orderService.retrieveOrderDetailById(1,101,1)).thenReturn(mockOrderDetail);
     doNothing().when(orderService).updateOrderDetail(any());
 
     mockMvc.perform(MockMvcRequestBuilders.put("/order/detail/update")

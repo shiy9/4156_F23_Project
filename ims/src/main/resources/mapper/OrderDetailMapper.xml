@@ -67,4 +67,10 @@
         FROM OrderDetail
         WHERE due_date &lt; CURRENT_DATE;
     </select>
+
+    <select id="retrieveOrderDetailById" resultMap="orderDetailMap">
+        SELECT order_id, item_id, location_id, quantity, amount, due_date
+        FROM OrderDetail
+        WHERE order_id = #{orderId} AND item_id = #{itemId} AND location_id = #{locationId}
+    </select>
 </mapper>

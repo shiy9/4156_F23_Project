@@ -167,8 +167,30 @@ public class OrderController {
           + "hasAuthority(T(com.ims.constants.ClientConstants).CLIENT_TYPE_RETAIL)")
   @PutMapping("/detail/update")
   public ResponseEntity<String> updateOrderDetail(@RequestBody OrderDetail orderDetail) {
-    orderService.updateOrderDetail(orderDetail);
-    return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_UPDATE_SUCCESS);
+    if (orderDetail.getQuantity() == null) {
+      orderService.updateOrderDetail(orderDetail);
+      return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_UPDATE_SUCCESS);
+    }
+    else {
+      ItemLocation itemLocation = itemManagementService.getItemLocationById(orderDetail.getItemId(), orderDetail.getLocationId());
+      if (itemLocation == null) {
+        return ResponseEntity.badRequest().body(ItemMessages.INVALID_ITEM_ID_OR_LOCATION_ID);
+      }
+      OrderDetail oldOrderDetail = orderService.retrieveOrderDetailById(orderDetail.getOrderId(), orderDetail.getItemId(), orderDetail.getLocationId());
+      if (oldOrderDetail == null) {
+        return ResponseEntity.badRequest().body(ItemMessages.INVALID_ITEM_ID_OR_LOCATION_ID);
+      }
+      int difference = oldOrderDetail.getQuantity() - orderDetail.getQuantity();
+      if (itemLocation.getQuantityAtLocation() + difference >= 0) {
+        itemLocation.setQuantityAtLocation(itemLocation.getQuantityAtLocation() + difference);
+        itemManagementService.updateItemLocation(itemLocation);
+        orderService.updateOrderDetail(orderDetail);
+        return ResponseEntity.ok(OrderMessages.ORDER_DETAIL_UPDATE_SUCCESS);
+      }
+      else {
+        return ResponseEntity.badRequest().body(ItemMessages.OUT_OF_QUANTITY_AT_LOCATION);
+      }
+    }
   }
 
   /**

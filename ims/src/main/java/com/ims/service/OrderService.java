@@ -36,4 +36,6 @@ public interface OrderService {
 
   List<OrderDetail> getExpirationAlertItem();
 
+  OrderDetail retrieveOrderDetailById(Integer orderId, Integer itemId, Integer locationId);
+
 }
