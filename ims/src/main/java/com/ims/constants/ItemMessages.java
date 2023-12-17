@@ -31,4 +31,8 @@ public final class ItemMessages {
   public static final String BARCODE_GENERATION_ERROR = "Error occurred during Barcode generation";
 
   public static final String OUT_OF_CURRENT_STOCK_LEVEL = "Out of current stock level";
+
+  public static final String OUT_OF_QUANTITY_AT_LOCATION = "Out of quantity at location";
+
+  public static final String INVALID_ITEM_ID_OR_LOCATION_ID = "Invalid item id or location id";
 }

@@ -34,4 +34,10 @@
     <select id="getItemLocationsByLocationId" resultMap="itemLocationMap">
         SELECT * FROM ItemLocation WHERE location_id = #{locationId}
     </select>
+
+    <update id="updateStock" parameterType="orderDetail">
+        UPDATE ItemLocation
+        SET quantity_at_location = quantity_at_location - #{quantity}
+        WHERE item_id = #{itemId}
+    </update>
 </mapper>

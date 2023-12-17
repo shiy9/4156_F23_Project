@@ -215,15 +215,15 @@ public class ItemManagementServiceImpl implements ItemManagementService {
 
   @Override
   public String decreaseItem(OrderDetail orderDetail) {
-    Item item = itemMapper.getItemByItemId(orderDetail.getItemId());
-    if (item == null) {
-      return ItemMessages.INVALID_ITEM_ID;
+    ItemLocation itemLocation = itemLocationMapper.getItemLocationById(orderDetail.getItemId(), orderDetail.getLocationId());
+    if (itemLocation == null) {
+      return ItemMessages.INVALID_ITEM_ID_OR_LOCATION_ID;
     }
-    if (item.getCurrentStockLevel() >= orderDetail.getQuantity()) {
-      itemMapper.updateStock(orderDetail);
+    if (itemLocation.getQuantityAtLocation() >= orderDetail.getQuantity()) {
+      itemLocationMapper.updateStock(orderDetail);
       return ItemMessages.UPDATE_SUCCESS;
     } else {
-      return ItemMessages.OUT_OF_CURRENT_STOCK_LEVEL;
+      return ItemMessages.OUT_OF_QUANTITY_AT_LOCATION;
     }
   }
 

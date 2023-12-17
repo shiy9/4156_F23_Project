@@ -2,6 +2,8 @@ package com.ims.mapper;
 
 import com.ims.entity.ItemLocation;
 import java.util.List;
+
+import com.ims.entity.OrderDetail;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,5 +23,7 @@ public interface ItemLocationMapper {
   List<ItemLocation> getItemLocationsByItemId(@Param("itemId") Integer itemId);
 
   List<ItemLocation> getItemLocationsByLocationId(@Param("locationId") Integer locationId);
+
+  int updateStock(OrderDetail orderDetail);
 
 }
