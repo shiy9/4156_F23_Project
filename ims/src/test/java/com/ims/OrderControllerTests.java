@@ -10,6 +10,7 @@ import com.ims.constants.OrderMessages;
 import com.ims.controller.OrderController;
 import com.ims.entity.Order;
 import com.ims.entity.OrderDetail;
+import com.ims.entity.ItemLocation;
 import com.ims.entity.OrderJoinOrderDetail;
 import com.ims.service.ItemManagementService;
 import com.ims.service.OrderService;
@@ -61,7 +62,11 @@ public class OrderControllerTests {
   public void createOrderTest() throws Exception {
     String orderJson = "{ \"clientId\": 1, \"type\": \"buy\", \"orderStatus\": " +
             "\"PENDING\", \"itemId\": 1, \"quantity\": 1, \"amount\": 100.5, \"locationId\": 1}";
-    when(itemManagementService.decreaseItem(any())).thenReturn(ItemMessages.UPDATE_SUCCESS);
+    ItemLocation mockItemLocation = new ItemLocation();
+    mockItemLocation.setItemId(1);
+    mockItemLocation.setLocationId(1);
+    mockItemLocation.setQuantityAtLocation(10);
+    when(itemManagementService.getItemLocationById(1,1)).thenReturn(mockItemLocation);
     doNothing().when(orderService).createOrder(any());
 
     mockMvc.perform(MockMvcRequestBuilders.post("/order/create")

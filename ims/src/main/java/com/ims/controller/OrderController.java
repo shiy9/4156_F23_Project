@@ -3,6 +3,7 @@ package com.ims.controller;
 import com.ims.constants.ItemMessages;
 import com.ims.constants.OrderMessages;
 import com.ims.entity.Order;
+import com.ims.entity.ItemLocation;
 import com.ims.entity.OrderDetail;
 import com.ims.entity.OrderJoinOrderDetail;
 import com.ims.service.ItemManagementService;
@@ -61,13 +62,18 @@ public class OrderController {
     orderDetail.setQuantity(orderJoinOrderDetail.getQuantity());
     orderDetail.setAmount(orderJoinOrderDetail.getAmount());
     orderDetail.setDueDate(orderJoinOrderDetail.getDueDate());
-    String result = itemManagementService.decreaseItem(orderDetail);
-    if (result.equals(ItemMessages.UPDATE_SUCCESS)) {
+    ItemLocation itemLocation = itemManagementService.getItemLocationById(orderJoinOrderDetail.getItemId(), orderJoinOrderDetail.getLocationId());
+    if (itemLocation == null) {
+      return ResponseEntity.badRequest().body(ItemMessages.INVALID_ITEM_ID_OR_LOCATION_ID);
+    }
+    if (itemLocation.getQuantityAtLocation() >= orderDetail.getQuantity()) {
+      itemLocation.setQuantityAtLocation(itemLocation.getQuantityAtLocation() - orderDetail.getQuantity());
+      itemManagementService.updateItemLocation(itemLocation);
       orderService.createOrderDetail(orderDetail);
       return ResponseEntity.ok(OrderMessages.ORDER_CREATE_SUCCESS);
     } else {
       orderService.deleteOrder(order.getOrderId());
-      return ResponseEntity.badRequest().body(result);
+      return ResponseEntity.badRequest().body(ItemMessages.OUT_OF_QUANTITY_AT_LOCATION);
     }
   }
 
